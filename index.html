@@ -5,121 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌌 Nebulosa de Liderazgo</title>
     <style>
-        /* ===== TODOS LOS ESTILOS (COMPLETOS Y ORIGINALES) ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            overflow: hidden;
-            background: #050812;
-        }
-
-        #info {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            z-index: 10;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 12px 24px;
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            pointer-events: none;
-            user-select: none;
-        }
-
-        #info h1 {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(90deg, #64b5f6, #e8a838, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: shine 4s linear infinite;
-        }
-
-        @keyframes shine {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        #info small {
-            display: block;
-            font-size: 12px;
-            -webkit-text-fill-color: #8899bb;
-        }
-
-        #loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 30;
-            color: white;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px 40px;
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        #loading .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid #64b5f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #loading .status {
-            font-size: 14px;
-            color: #8899bb;
-        }
-
-        #loading .status strong {
-            color: #eef;
-        }
-
-        #loading.hidden {
-            display: none;
-        }
-
-        #tooltip {
-            position: absolute;
-            background: rgba(10, 14, 26, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 10px;
-            padding: 10px 16px;
-            pointer-events: none;
-            z-index: 20;
-            display: none;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-            color: white;
-            font-size: 13px;
-            min-width: 160px;
-        }
-
+        /* ===== TODOS LOS ESTILOS COMPLETOS ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { overflow: hidden; background: #050812; }
+        #info { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.8); font-size: 14px; z-index: 10; text-align: center; background: rgba(0,0,0,0.6); padding: 12px 24px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); pointer-events: none; user-select: none; }
+        #info h1 { font-size: 20px; font-weight: 700; margin: 0; background: linear-gradient(90deg, #64b5f6, #e8a838, #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% auto; animation: shine 4s linear infinite; }
+        @keyframes shine { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        #info small { display: block; font-size: 12px; -webkit-text-fill-color: #8899bb; }
+        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 30; color: white; text-align: center; background: rgba(0,0,0,0.7); padding: 30px 40px; border-radius: 16px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        #loading .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #64b5f6; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #loading .status { font-size: 14px; color: #8899bb; }
+        #loading .status strong { color: #eef; }
+        #loading.hidden { display: none; }
+        #tooltip { position: absolute; background: rgba(10,14,26,0.92); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 16px; pointer-events: none; z-index: 20; display: none; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.6); color: white; font-size: 13px; min-width: 160px; }
         #tooltip .tt-name { font-weight: 700; color: #eef; font-size: 14px; }
         #tooltip .tt-process { color: #7788aa; font-size: 11px; margin-top: 2px; }
         #tooltip .tt-colors { display: flex; gap: 6px; margin-top: 5px; align-items: center; }
@@ -129,322 +28,56 @@
         .tt-dot.amarillo { background: #e8a838; }
         .tt-dot.verde { background: #3a8c5a; }
         #tooltip .tt-label { font-size: 11px; color: #8899bb; margin-left: 4px; }
-
-        .controls {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            display: flex;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 18px;
-            border-radius: 14px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .controls button {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ccd;
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .controls button:hover {
-            background: rgba(255, 255, 255, 0.12);
-            color: white;
-        }
-
-        .controls .zoom-level {
-            color: #556688;
-            font-size: 13px;
-            padding: 6px 10px;
-        }
-
-        .legend {
-            position: absolute;
-            right: 24px;
-            bottom: 100px;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 14px 18px;
-            border-radius: 14px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ccd;
-            font-size: 12px;
-            margin: 4px 0;
-        }
-
-        .legend-item .dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            flex-shrink: 0;
-        }
+        .controls { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 10px; background: rgba(0,0,0,0.6); padding: 10px 18px; border-radius: 14px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); }
+        .controls button { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #ccd; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.3s; }
+        .controls button:hover { background: rgba(255,255,255,0.12); color: white; }
+        .controls .zoom-level { color: #556688; font-size: 13px; padding: 6px 10px; }
+        .legend { position: absolute; right: 24px; bottom: 100px; z-index: 10; background: rgba(0,0,0,0.7); padding: 14px 18px; border-radius: 14px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); }
+        .legend-item { display: flex; align-items: center; gap: 10px; color: #ccd; font-size: 12px; margin: 4px 0; }
+        .legend-item .dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0; }
         .legend-item .dot.azul { background: #2a6f97; box-shadow: 0 0 12px rgba(42,111,151,0.4); }
         .legend-item .dot.rojo { background: #c73e3e; box-shadow: 0 0 12px rgba(199,62,62,0.4); }
         .legend-item .dot.amarillo { background: #e8a838; box-shadow: 0 0 12px rgba(232,168,56,0.4); }
         .legend-item .dot.verde { background: #3a8c5a; box-shadow: 0 0 12px rgba(58,140,90,0.4); }
-
-        #stats {
-            position: absolute;
-            bottom: 90px;
-            left: 24px;
-            z-index: 10;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 11px;
-            font-family: monospace;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .btn-refresh {
-            position: absolute;
-            top: 90px;
-            right: 24px;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ccd;
-            padding: 8px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            backdrop-filter: blur(12px);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-refresh:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .btn-refresh .icon {
-            font-size: 16px;
-        }
-
-        .btn-refresh .badge {
-            background: rgba(100, 181, 246, 0.2);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            color: #64b5f6;
-        }
-
-        .btn-refresh .badge.loading {
-            color: #ffd54f;
-            animation: pulse 0.8s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(16px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal {
-            background: #0d1225;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            max-width: 860px;
-            width: 94%;
-            max-height: 88vh;
-            overflow-y: auto;
-            border-radius: 20px;
-            padding: 30px 35px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            color: white;
-            position: relative;
-        }
-
+        #stats { position: absolute; bottom: 90px; left: 24px; z-index: 10; color: rgba(255,255,255,0.2); font-size: 11px; font-family: monospace; pointer-events: none; user-select: none; }
+        .btn-refresh { position: absolute; top: 90px; right: 24px; z-index: 10; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); color: #ccd; padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 12px; backdrop-filter: blur(12px); transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+        .btn-refresh:hover { background: rgba(255,255,255,0.1); color: white; }
+        .btn-refresh .icon { font-size: 16px; }
+        .btn-refresh .badge { background: rgba(100,181,246,0.2); padding: 2px 8px; border-radius: 12px; font-size: 10px; color: #64b5f6; }
+        .btn-refresh .badge.loading { color: #ffd54f; animation: pulse 0.8s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(16px); z-index: 1000; justify-content: center; align-items: center; animation: fadeIn 0.3s ease; }
+        .modal-overlay.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal { background: #0d1225; border: 1px solid rgba(255,255,255,0.08); max-width: 860px; width: 94%; max-height: 88vh; overflow-y: auto; border-radius: 20px; padding: 30px 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); color: white; position: relative; }
         .modal::-webkit-scrollbar { width: 6px; }
-        .modal::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
-        .modal::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 16px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .modal-header h2 {
-            color: #eef;
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .modal-header h2 small {
-            font-size: 14px;
-            font-weight: 400;
-            color: #7788aa;
-            display: block;
-            margin-top: 2px;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 30px;
-            cursor: pointer;
-            color: #556688;
-            transition: all 0.3s ease;
-            padding: 0 8px;
-            line-height: 1;
-        }
-
-        .modal-close:hover {
-            color: #c73e3e;
-            transform: rotate(90deg);
-        }
-
-        .modal .badge-container {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .modal .badge-container .badge {
-            display: inline-block;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            color: white;
-        }
-
+        .modal::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+        .modal::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .modal-header h2 { color: #eef; font-size: 22px; font-weight: 700; }
+        .modal-header h2 small { font-size: 14px; font-weight: 400; color: #7788aa; display: block; margin-top: 2px; }
+        .modal-close { background: none; border: none; font-size: 30px; cursor: pointer; color: #556688; transition: all 0.3s ease; padding: 0 8px; line-height: 1; }
+        .modal-close:hover { color: #c73e3e; transform: rotate(90deg); }
+        .modal .badge-container { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .modal .badge-container .badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: white; }
         .badge-azul { background: #2a6f97; }
         .badge-rojo { background: #c73e3e; }
         .badge-amarillo { background: #e8a838; }
         .badge-verde { background: #3a8c5a; }
-
-        .modal .analysis-section {
-            margin-bottom: 14px;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            border-left: 4px solid rgba(100, 181, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .modal .analysis-section:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .modal .analysis-section h4 {
-            color: #ccd;
-            font-size: 15px;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .modal .analysis-section p {
-            font-size: 14px;
-            color: #8899bb;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        .modal .analysis-section .highlight {
-            color: #eef;
-            font-weight: 600;
-        }
-
-        .modal .analysis-section .color-tag {
-            display: inline-block;
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            color: white;
-            margin: 0 2px;
-        }
-
+        .modal .analysis-section { margin-bottom: 14px; padding: 14px 18px; background: rgba(255,255,255,0.03); border-radius: 12px; border-left: 4px solid rgba(100,181,246,0.3); transition: all 0.3s ease; }
+        .modal .analysis-section:hover { background: rgba(255,255,255,0.06); }
+        .modal .analysis-section h4 { color: #ccd; font-size: 15px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .modal .analysis-section p { font-size: 14px; color: #8899bb; line-height: 1.6; margin: 0; }
+        .modal .analysis-section .highlight { color: #eef; font-weight: 600; }
+        .modal .analysis-section .color-tag { display: inline-block; padding: 2px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; color: white; margin: 0 2px; }
         .tag-azul { background: #2a6f97; }
         .tag-rojo { background: #c73e3e; }
         .tag-amarillo { background: #e8a838; }
         .tag-verde { background: #3a8c5a; }
-
-        .modal .conclusion {
-            margin-top: 16px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(26, 58, 106, 0.3), rgba(42, 111, 151, 0.15));
-            border-radius: 12px;
-            border: 1px solid rgba(100, 181, 246, 0.15);
-            text-align: center;
-            font-size: 14px;
-            color: #8899bb;
-            line-height: 1.6;
-        }
-
+        .modal .conclusion { margin-top: 16px; padding: 16px 20px; background: linear-gradient(135deg, rgba(26,58,106,0.3), rgba(42,111,151,0.15)); border-radius: 12px; border: 1px solid rgba(100,181,246,0.15); text-align: center; font-size: 14px; color: #8899bb; line-height: 1.6; }
         .modal .conclusion strong { color: #eef; }
-
-        @media (max-width: 768px) {
-            .modal { padding: 20px; max-height: 92vh; }
-            .modal-header h2 { font-size: 18px; }
-            .modal .analysis-section { padding: 10px 14px; }
-            .modal .analysis-section p { font-size: 13px; }
-            #info h1 { font-size: 16px; }
-            .legend { right: 12px; bottom: 80px; padding: 10px 14px; }
-            .legend-item { font-size: 10px; }
-            .controls { padding: 8px 12px; gap: 6px; }
-            .controls button { font-size: 11px; padding: 4px 10px; }
-            .btn-refresh { top: 80px; right: 12px; padding: 6px 12px; font-size: 11px; }
-        }
-
-        @media (max-width: 500px) {
-            .modal { padding: 16px; }
-            .modal .analysis-section h4 { font-size: 13px; }
-            .modal .analysis-section p { font-size: 12px; }
-            .badge-container .badge { font-size: 11px; padding: 3px 12px; }
-            #loading { padding: 20px; width: 90%; }
-        }
+        @media (max-width: 768px) { .modal { padding: 20px; max-height: 92vh; } .modal-header h2 { font-size: 18px; } .modal .analysis-section { padding: 10px 14px; } .modal .analysis-section p { font-size: 13px; } #info h1 { font-size: 16px; } .legend { right: 12px; bottom: 80px; padding: 10px 14px; } .legend-item { font-size: 10px; } .controls { padding: 8px 12px; gap: 6px; } .controls button { font-size: 11px; padding: 4px 10px; } .btn-refresh { top: 80px; right: 12px; padding: 6px 12px; font-size: 11px; } }
+        @media (max-width: 500px) { .modal { padding: 16px; } .modal .analysis-section h4 { font-size: 13px; } .modal .analysis-section p { font-size: 12px; } .badge-container .badge { font-size: 11px; padding: 3px 12px; } #loading { padding: 20px; width: 90%; } }
     </style>
 </head>
 <body>
@@ -507,21 +140,11 @@
 
     <script>
         // ============================================================
-        //  CONFIGURACIÓN - MÚLTIPLES PROXYS Y DATOS DE RESPALDO
+        //  CONFIGURACIÓN - CONEXIÓN DIRECTA + DATOS DE EJEMPLO
         // ============================================================
 
+        // ⭐ TU URL DE GOOGLE APPS SCRIPT
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIG506XO2hGz4xL90AmVQnqDN1zeKVjLp1RSMs6W4SyMZmlFPaqQoKCsPzLv396quW/exec';
-
-        // Lista de proxys a probar (si uno falla, usa el siguiente)
-        const PROXIES = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?url=',
-            'https://cors-anywhere.herokuapp.com/'
-        ];
-
-        let currentProxyIndex = 0;
-        let leadersData = [];
-        let lastUpdateTime = null;
 
         // ============================================================
         //  DATOS DE EJEMPLO (SIEMPRE DISPONIBLES)
@@ -646,17 +269,21 @@
         let allLeaderObjects = [];
         let nebulaParticles = [];
         let glowParticles = [];
+        let brightStars = [];
         let hoveredLeader = null;
         let selectedLeader = null;
         let isLoading = false;
         let autoRefreshInterval = null;
-        let brightStars = [];
+        let leadersData = [];
+        let lastUpdateTime = null;
 
         // Referencias del modal
         let modalOverlay, modalTitle, modalSubtitle, badgeContainer, modalBody, modalConclusion;
+        let mouse = new THREE.Vector2();
+        let raycaster = new THREE.Raycaster();
 
         // ============================================================
-        //  FUNCIÓN PARA CARGAR DATOS CON MÚLTIPLES PROXYS
+        //  FUNCIÓN PARA CARGAR DATOS (CONEXIÓN DIRECTA)
         // ============================================================
         async function loadDataFromSheets() {
             if (isLoading) return;
@@ -673,102 +300,106 @@
             refreshBadge.textContent = '⏳';
             refreshBadge.classList.add('loading');
 
-            let success = false;
-            let errorMessage = '';
+            try {
+                // 🔗 CONEXIÓN DIRECTA (SIN PROXY)
+                const url = SCRIPT_URL + '?t=' + Date.now();
+                console.log('🔗 Intentando conexión directa:', url);
 
-            // Probar cada proxy
-            for (let i = 0; i < PROXIES.length; i++) {
-                try {
-                    const proxy = PROXIES[i];
-                    const url = proxy + encodeURIComponent(SCRIPT_URL) + '&_t=' + Date.now();
-                    console.log(`🔗 Intentando con proxy ${i + 1}: ${proxy}`);
-
-                    const response = await fetch(url, {
-                        cache: 'no-cache',
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache',
-                            'Expires': '0'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                const response = await fetch(url, {
+                    cache: 'no-cache',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
                     }
+                });
 
-                    const text = await response.text();
-
-                    let data;
-                    try {
-                        data = JSON.parse(text);
-                    } catch (e) {
-                        throw new Error('No es JSON válido');
-                    }
-
-                    if (data && data.error) {
-                        throw new Error(data.error);
-                    }
-
-                    let rows = data;
-                    if (data.data && Array.isArray(data.data)) {
-                        rows = data.data;
-                    } else if (data.success && data.data) {
-                        rows = data.data;
-                    }
-
-                    if (!rows || rows.length === 0) {
-                        throw new Error('No se encontraron datos en la hoja.');
-                    }
-
-                    const newData = rows.map(row => ({
-                        nombre: row.Nombre || row.nombre || '',
-                        proceso: row['Proceso/Subproceso'] || row.proceso || row['Proceso'] || '',
-                        cargo: row.Cargo || row.cargo || '',
-                        campus: row.Campus || row.campus || '',
-                        principal: row['LIDERAZGO PRINCIPAL'] || row.principal || row['Principal'] || '',
-                        secundario: row['LIDERAZGO SECUNDARIO'] || row.secundario || row['Secundario'] || ''
-                    })).filter(l => l.nombre !== '' && l.principal !== '');
-
-                    if (newData.length === 0) {
-                        throw new Error('No se encontraron datos válidos.');
-                    }
-
-                    // ¡Éxito!
-                    leadersData = newData;
-                    success = true;
-                    break;
-
-                } catch (error) {
-                    console.warn(`⚠️ Proxy ${i + 1} falló:`, error.message);
-                    errorMessage = error.message;
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            }
 
-            // Si no funcionó ningún proxy, usar datos de ejemplo
-            if (!success) {
-                console.warn('⚠️ Todos los proxys fallaron. Usando datos de ejemplo.');
-                loadingStatus.textContent = `⚠️ Sin conexión (${errorMessage}). Mostrando datos de ejemplo.`;
-                leadersData = exampleData;
-                document.getElementById('lastUpdate').textContent = 'Datos de ejemplo (sin conexión)';
-            } else {
+                const text = await response.text();
+                console.log('📄 Respuesta del servidor (primeros 200 caracteres):', text.substring(0, 200));
+                loadingStatus.textContent = 'Procesando datos...';
+
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    throw new Error('La respuesta no es JSON válido. Verifica la URL del script.');
+                }
+
+                // Verificar si hay error
+                if (data && data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Extraer datos (con el nuevo formato con wrapper)
+                let rows = data;
+                if (data.data && Array.isArray(data.data)) {
+                    rows = data.data;
+                } else if (data.success && data.data) {
+                    rows = data.data;
+                }
+
+                if (!rows || rows.length === 0) {
+                    throw new Error('No se encontraron datos en la hoja.');
+                }
+
+                // Mapear datos
+                const newData = rows.map(row => ({
+                    nombre: row.Nombre || row.nombre || '',
+                    proceso: row['Proceso/Subproceso'] || row.proceso || row['Proceso'] || '',
+                    cargo: row.Cargo || row.cargo || '',
+                    campus: row.Campus || row.campus || '',
+                    principal: row['LIDERAZGO PRINCIPAL'] || row.principal || row['Principal'] || '',
+                    secundario: row['LIDERAZGO SECUNDARIO'] || row.secundario || row['Secundario'] || ''
+                })).filter(l => l.nombre !== '' && l.principal !== '');
+
+                if (newData.length === 0) {
+                    throw new Error('No se encontraron datos válidos en la hoja.');
+                }
+
+                leadersData = newData;
                 lastUpdateTime = new Date();
+
                 loadingStatus.textContent = `✅ ${leadersData.length} líderes cargados correctamente`;
                 document.getElementById('lastUpdate').textContent = lastUpdateTime.toLocaleString('es-CO');
-            }
 
-            // Actualizar UI y galaxia
-            document.getElementById('leaderCount').textContent = leadersData.length;
-            regenerateGalaxy();
+                // Actualizar UI y galaxia
+                document.getElementById('leaderCount').textContent = leadersData.length;
+                regenerateGalaxy();
 
-            setTimeout(() => {
-                loading.classList.add('hidden');
-                btnRefresh.disabled = false;
-                refreshBadge.textContent = success ? '✅' : '⚠️';
-                refreshBadge.classList.remove('loading');
                 setTimeout(() => {
-                    refreshBadge.textContent = 'Auto';
-                }, 3000);
-            }, 800);
+                    loading.classList.add('hidden');
+                    btnRefresh.disabled = false;
+                    refreshBadge.textContent = '✅';
+                    refreshBadge.classList.remove('loading');
+                    setTimeout(() => {
+                        refreshBadge.textContent = 'Auto';
+                    }, 3000);
+                }, 800);
+
+            } catch (error) {
+                console.error('❌ Error cargando datos:', error);
+                loadingStatus.textContent = `⚠️ Usando datos de ejemplo (${error.message})`;
+
+                // Usar datos de ejemplo
+                leadersData = exampleData;
+                document.getElementById('lastUpdate').textContent = 'Datos de ejemplo (sin conexión)';
+                document.getElementById('leaderCount').textContent = leadersData.length;
+                regenerateGalaxy();
+
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                    btnRefresh.disabled = false;
+                    refreshBadge.textContent = '⚠️';
+                    refreshBadge.classList.remove('loading');
+                    setTimeout(() => {
+                        refreshBadge.textContent = 'Auto';
+                    }, 3000);
+                }, 1500);
+            }
 
             isLoading = false;
         }
@@ -1575,9 +1206,6 @@
         // ============================================================
         //  EVENTOS
         // ============================================================
-        let mouse = new THREE.Vector2();
-        let raycaster = new THREE.Raycaster();
-
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
         });
