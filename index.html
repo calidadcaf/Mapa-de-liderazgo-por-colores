@@ -507,11 +507,15 @@
 
     <script>
         // ============================================================
-        //  ⭐ CONFIGURACIÓN - TU NUEVA URL DE GOOGLE APPS SCRIPT
+        //  ⭐ CONFIGURACIÓN - URL DE GOOGLE APPS SCRIPT CON PROXY CORS
         // ============================================================
 
-        // 🔑 TU NUEVA URL DE GOOGLE APPS SCRIPT (ACTUALIZADA)
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzIG506XO2hGz4xL90AmVQnqDN1zeKVjLp1RSMs6W4SyMZmlFPaqQoKCsPzLv396quW/exec';
+        // 🔑 TU URL DE GOOGLE APPS SCRIPT
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIG506XO2hGz4xL90AmVQnqDN1zeKVjLp1RSMs6W4SyMZmlFPaqQoKCsPzLv396quW/exec';
+
+        // ⭐ USAMOS UN PROXY CORS PARA EVITAR "Failed to fetch"
+        // La URL con proxy: api.allorigins.win es un servicio que evita el bloqueo CORS
+        const SHEET_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SCRIPT_URL);
 
         // ============================================================
         //  ESTADO GLOBAL
@@ -575,7 +579,7 @@
         };
 
         // ============================================================
-        //  FUNCIÓN PARA CARGAR DATOS DESDE GOOGLE APPS SCRIPT
+        //  FUNCIÓN PARA CARGAR DATOS CON PROXY CORS
         // ============================================================
         async function loadDataFromSheets() {
             if (isLoading) return;
@@ -593,8 +597,9 @@
             refreshBadge.classList.add('loading');
 
             try {
-                const url = SHEET_URL + '?t=' + Date.now();
-                console.log('🔗 URL de conexión:', url);
+                // Usamos la URL con proxy + timestamp para evitar caché
+                const url = SHEET_URL + '&_t=' + Date.now();
+                console.log('🔗 URL de conexión (con proxy):', url);
 
                 const response = await fetch(url, {
                     cache: 'no-cache',
@@ -610,7 +615,7 @@
                 }
 
                 const text = await response.text();
-                console.log('📄 Respuesta del servidor:', text);
+                console.log('📄 Respuesta del servidor (primeros 200 caracteres):', text.substring(0, 200));
                 loadingStatus.textContent = 'Procesando datos...';
 
                 // Intentar parsear como JSON
@@ -618,6 +623,7 @@
                 try {
                     data = JSON.parse(text);
                 } catch (e) {
+                    console.error('Error al parsear JSON:', e);
                     throw new Error('La respuesta no es JSON válido. Verifica la URL del script.');
                 }
 
