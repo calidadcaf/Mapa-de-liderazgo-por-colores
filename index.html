@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌌 Nebulosa de Liderazgo</title>
     <style>
-        body {
+        /* ===== TODOS LOS ESTILOS (COMPLETOS) ===== */
+        * {
             margin: 0;
-            overflow: hidden;
-            background: #050812;
-            font-family: 'Segoe UI', sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* ===== INFO SUPERIOR ===== */
+        body {
+            overflow: hidden;
+            background: #050812;
+        }
+
         #info {
             position: absolute;
             top: 20px;
@@ -53,29 +58,78 @@
             -webkit-text-fill-color: #8899bb;
         }
 
-        #container {
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            color: white;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px 40px;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             flex-direction: column;
-            width: 100vw;
-            height: 100vh;
-            padding-top: 80px;
-            box-sizing: border-box;
+            align-items: center;
+            gap: 12px;
         }
 
-        #galaxy-container {
-            flex: 1;
-            position: relative;
-            background: radial-gradient(ellipse at center, #0a0e1a, #050812);
-            overflow: hidden;
+        #loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #64b5f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        #galaxy-container canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* ===== CONTROLES ===== */
+        #loading .status {
+            font-size: 14px;
+            color: #8899bb;
+        }
+
+        #loading .status strong {
+            color: #eef;
+        }
+
+        #loading.hidden {
+            display: none;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: rgba(10, 14, 26, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 10px 16px;
+            pointer-events: none;
+            z-index: 20;
+            display: none;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 13px;
+            min-width: 160px;
+        }
+
+        #tooltip .tt-name { font-weight: 700; color: #eef; font-size: 14px; }
+        #tooltip .tt-process { color: #7788aa; font-size: 11px; margin-top: 2px; }
+        #tooltip .tt-colors { display: flex; gap: 6px; margin-top: 5px; align-items: center; }
+        #tooltip .tt-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); }
+        .tt-dot.azul { background: #2a6f97; }
+        .tt-dot.rojo { background: #c73e3e; }
+        .tt-dot.amarillo { background: #e8a838; }
+        .tt-dot.verde { background: #3a8c5a; }
+        #tooltip .tt-label { font-size: 11px; color: #8899bb; margin-left: 4px; }
+
         .controls {
             position: absolute;
             bottom: 30px;
@@ -113,7 +167,6 @@
             padding: 6px 10px;
         }
 
-        /* ===== LEYENDA ===== */
         .legend {
             position: absolute;
             right: 24px;
@@ -158,30 +211,295 @@
             pointer-events: none;
             user-select: none;
         }
+
+        .btn-refresh {
+            position: absolute;
+            top: 90px;
+            right: 24px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccd;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-refresh:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-refresh .icon {
+            font-size: 16px;
+        }
+
+        .btn-refresh .badge {
+            background: rgba(100, 181, 246, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            color: #64b5f6;
+        }
+
+        .btn-refresh .badge.loading {
+            color: #ffd54f;
+            animation: pulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(16px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal {
+            background: #0d1225;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 860px;
+            width: 94%;
+            max-height: 88vh;
+            overflow-y: auto;
+            border-radius: 20px;
+            padding: 30px 35px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            color: white;
+            position: relative;
+        }
+
+        .modal::-webkit-scrollbar { width: 6px; }
+        .modal::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
+        .modal::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .modal-header h2 {
+            color: #eef;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .modal-header h2 small {
+            font-size: 14px;
+            font-weight: 400;
+            color: #7788aa;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: #556688;
+            transition: all 0.3s ease;
+            padding: 0 8px;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #c73e3e;
+            transform: rotate(90deg);
+        }
+
+        .modal .badge-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .modal .badge-container .badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge-azul { background: #2a6f97; }
+        .badge-rojo { background: #c73e3e; }
+        .badge-amarillo { background: #e8a838; }
+        .badge-verde { background: #3a8c5a; }
+
+        .modal .analysis-section {
+            margin-bottom: 14px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-left: 4px solid rgba(100, 181, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .modal .analysis-section:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .modal .analysis-section h4 {
+            color: #ccd;
+            font-size: 15px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal .analysis-section p {
+            font-size: 14px;
+            color: #8899bb;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .modal .analysis-section .highlight {
+            color: #eef;
+            font-weight: 600;
+        }
+
+        .modal .analysis-section .color-tag {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            margin: 0 2px;
+        }
+
+        .tag-azul { background: #2a6f97; }
+        .tag-rojo { background: #c73e3e; }
+        .tag-amarillo { background: #e8a838; }
+        .tag-verde { background: #3a8c5a; }
+
+        .modal .conclusion {
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(26, 58, 106, 0.3), rgba(42, 111, 151, 0.15));
+            border-radius: 12px;
+            border: 1px solid rgba(100, 181, 246, 0.15);
+            text-align: center;
+            font-size: 14px;
+            color: #8899bb;
+            line-height: 1.6;
+        }
+
+        .modal .conclusion strong { color: #eef; }
+
+        @media (max-width: 768px) {
+            .modal { padding: 20px; max-height: 92vh; }
+            .modal-header h2 { font-size: 18px; }
+            .modal .analysis-section { padding: 10px 14px; }
+            .modal .analysis-section p { font-size: 13px; }
+            #info h1 { font-size: 16px; }
+            .legend { right: 12px; bottom: 80px; padding: 10px 14px; }
+            .legend-item { font-size: 10px; }
+            .controls { padding: 8px 12px; gap: 6px; }
+            .controls button { font-size: 11px; padding: 4px 10px; }
+            .btn-refresh { top: 80px; right: 12px; padding: 6px 12px; font-size: 11px; }
+        }
+
+        @media (max-width: 500px) {
+            .modal { padding: 16px; }
+            .modal .analysis-section h4 { font-size: 13px; }
+            .modal .analysis-section p { font-size: 12px; }
+            .badge-container .badge { font-size: 11px; padding: 3px 12px; }
+            #loading { padding: 20px; width: 90%; }
+        }
     </style>
 </head>
 <body>
 
     <div id="info">
         <h1>🌌 Nebulosa de Liderazgo</h1>
-        <small>🖱️ Arrastra para girar · Scroll para zoom</small>
+        <small>🖱️ Arrastra para girar · Scroll para zoom · Click en estrella para análisis</small>
     </div>
 
-    <div id="container">
-        <div id="galaxy-container">
-            <canvas id="galaxyCanvas"></canvas>
-            <div class="legend">
-                <div class="legend-item"><span class="dot azul"></span> Azul - Analítico</div>
-                <div class="legend-item"><span class="dot rojo"></span> Rojo - Directo</div>
-                <div class="legend-item"><span class="dot amarillo"></span> Amarillo - Sociable</div>
-                <div class="legend-item"><span class="dot verde"></span> Verde - Empático</div>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div class="status">Cargando datos desde <strong>Google Sheets</strong>...</div>
+        <div class="status" style="font-size:12px;color:#556688;" id="loadingStatus">Conectando con el servidor</div>
+    </div>
+
+    <div id="tooltip">
+        <div class="tt-name" id="ttName">Nombre</div>
+        <div class="tt-process" id="ttProcess">Proceso</div>
+        <div class="tt-colors" id="ttColors"></div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item"><span class="dot azul"></span> Azul - Analítico</div>
+        <div class="legend-item"><span class="dot rojo"></span> Rojo - Directo</div>
+        <div class="legend-item"><span class="dot amarillo"></span> Amarillo - Sociable</div>
+        <div class="legend-item"><span class="dot verde"></span> Verde - Empático</div>
+    </div>
+
+    <button class="btn-refresh" onclick="refreshData()" id="btnRefresh">
+        <span class="icon">🔄</span>
+        Actualizar datos
+        <span class="badge" id="refreshBadge">Auto</span>
+    </button>
+
+    <div id="stats">🌟 Líderes: <span id="leaderCount">0</span> · 📅 <span id="lastUpdate">Cargando...</span></div>
+
+    <div class="controls">
+        <button onclick="resetView()">⟲ Reset</button>
+        <button onclick="toggleRotation()">⏸ Pausar</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle">🔍 Análisis de Liderazgo</h2>
+                    <small id="modalSubtitle" style="color:#7788aa;font-size:14px;display:block;margin-top:2px;">Cargo · Proceso</small>
+                </div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
             </div>
-            <div id="stats">🌟 Líderes: <span id="leaderCount">0</span></div>
-            <div class="controls">
-                <button onclick="resetView()">⟲ Reset</button>
-                <button onclick="toggleRotation()">⏸ Pausar</button>
-                <span class="zoom-level" id="zoomLevel">100%</span>
-            </div>
+            <div class="badge-container" id="badgeContainer"></div>
+            <div id="modalBody"></div>
+            <div class="conclusion" id="modalConclusion"></div>
         </div>
     </div>
 
@@ -190,34 +508,56 @@
 
     <script>
         // ============================================================
-        //  DATOS - CONEXIÓN DIRECTA A GOOGLE SHEETS (SIN PROXY)
-        //  ESTA VERSIÓN INTENTA LA CONEXIÓN DIRECTA PRIMERO
+        //  CONFIGURACIÓN - URL DE GOOGLE APPS SCRIPT
         // ============================================================
 
-        // 🔑 TU URL DE GOOGLE APPS SCRIPT
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIG506XO2hGz4xL90AmVQnqDN1zeKVjLp1RSMs6W4SyMZmlFPaqQoKCsPzLv396quW/exec';
-
-        // Intentamos conexión directa primero
-        let SHEET_URL = SCRIPT_URL;
-
-        // Si falla, usamos proxy
-        let useProxy = false;
+        const SHEET_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SCRIPT_URL);
 
         // ============================================================
-        //  THREE.JS - ESCENA
+        //  DESCRIPCIONES DE COLORES
         // ============================================================
-        let scene, camera, renderer, controls;
-        let isRotating = true;
-        let leadersData = [];
-        let leaderMeshes = [];
-        let allLeaderObjects = [];
-        let galaxyParticles = [];
-
-        const colorMap = { 'Azul': '#2a6f97', 'Rojo': '#c73e3e', 'Amarillo': '#e8a838', 'Verde': '#3a8c5a' };
-        const colorHex = { 'Azul': 0x2a6f97, 'Rojo': 0xc73e3e, 'Amarillo': 0xe8a838, 'Verde': 0x3a8c5a };
+        const colorDescriptions = {
+            "Azul": {
+                caracteristicas: "PRECISO, DETALLISTA, REFLEXIVO, RESERVADO, METÓDICO, RIGUROSO, TIMIDO",
+                diaMalo: "RÍGIDO, CERRIL, CUADRICULADO, INSOCIABLE, FRÍO, DISTANTE, QUISQUILLOSO",
+                ambienteIdeal: "DE PENSAMIENTO CRITICO, ORDEN Y CALIDAD",
+                lesGusta: "LOGRAR ALTOS ESTÁNDARES, OPORTUNIDADES PARA ANALIZAR",
+                comoLlegar: "ORIENTADO AL DETALLE, ESPECÍFICO",
+                aporte: "Asegura la calidad, el orden y la precisión en los procesos. Minimiza riesgos y garantiza el cumplimiento de estándares.",
+                riesgo: "Puede volverse rígido y lento para adaptarse a los cambios. Su enfoque en el detalle puede frenar la innovación."
+            },
+            "Rojo": {
+                caracteristicas: "DIRECTO, ACTIVO, RESOLUTIVO, EMPRENDEDOR, DECIDIDO, EXIGENTE, RESUELTO",
+                diaMalo: "AGRESIVO, EXCITABLE, EXALTADO, INTOLERANTE, IMPACIENTE, IRREFLEXIVO, IMPULSIVO",
+                ambienteIdeal: "LIBRE DE CONTROL, AMBIENTE INNOVADOR, ORIENTACIÓN HACIA FUTURO",
+                lesGusta: "LOS RESULTADOS, LA PRONTITUD Y LOS RETOS",
+                comoLlegar: "CLARIDAD, CONCRETO Y CON OPCIONES",
+                aporte: "Impulsa la acción, la innovación y el logro de resultados. Tiene visión de futuro y capacidad para tomar decisiones rápidas.",
+                riesgo: "Puede ser confrontante e impaciente, generando fricciones. Su estilo directo puede desmotivar a equipos más sensibles."
+            },
+            "Amarillo": {
+                caracteristicas: "SOCIABLE, EMPRENDEDOR, DESENVUELTO, PERSUASIVO, DINÁMICO, DIVERTIDO, DE TRATO FÁCIL",
+                diaMalo: "INDISCRETO, PRECIPITADO, FRENÉTICO, ESTRESADO, CHARLATÁN, IRREFLEXIVO",
+                ambienteIdeal: "CON MOVILIDAD, JEFE ASEQUIBLE, INTERACCIÓN CON MUCHA GENTE",
+                lesGusta: "CAMBIOS, EXPRESARSE E IDEAS NUEVAS",
+                comoLlegar: "SIMPATÍA, ENTUSIASMO Y FLEXIBILIDAD",
+                aporte: "Genera redes de contacto, promueve la innovación y motiva a los equipos. Es un excelente comunicador y generador de entusiasmo.",
+                riesgo: "Puede descuidar los detalles operativos. Su enfoque en lo externo puede restar atención a los procesos internos."
+            },
+            "Verde": {
+                caracteristicas: "RAZONABLE, EMPÁTICO, PERSISTENTE, TRANQUILO, CUIDADOSO, CONCILIADOR, PACIENTE",
+                diaMalo: "PASIVO, LENTO, SUMISO, DEPENDIENTE, SOSO, COBARDE, DESCENTRADO",
+                ambienteIdeal: "ESTABLE, PREDECIBLE, CON PROCEDIMIENTOS CONOCIDOS",
+                lesGusta: "RELACIONES ARMÓNICAS, LAS NORMAS CLARAS Y LA ESTABILIDAD",
+                comoLlegar: "SEA ACEPTADO, PACIENTE Y LA ESCUCHA ACTIVA",
+                aporte: "Fomenta la armonía, la estabilidad y el trabajo en equipo. Escucha activamente y construye consensos.",
+                riesgo: "Puede ser renuente al cambio y evasivo ante decisiones bajo presión. Su estilo pausado puede retrasar la toma de decisiones."
+            }
+        };
 
         // ============================================================
-        //  DATOS DE EJEMPLO (SI FALLA LA CONEXIÓN)
+        //  DATOS DE EJEMPLO
         // ============================================================
         const exampleData = [
             { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera", principal: "Amarillo", secundario: "Verde" },
@@ -252,55 +592,77 @@
         ];
 
         // ============================================================
+        //  ESTADO GLOBAL
+        // ============================================================
+        let leadersData = [];
+        let scene, camera, renderer, controls;
+        let leaderMeshes = [];
+        let isRotating = true;
+        let raycaster, mouse;
+        let hoveredLeader = null;
+        let allLeaderObjects = [];
+        let nebulaParticles = [];
+        let glowParticles = [];
+        let selectedLeader = null;
+        let isLoading = false;
+        let lastUpdateTime = null;
+        let autoRefreshInterval = null;
+
+        let modalOverlay, modalTitle, modalSubtitle, badgeContainer, modalBody, modalConclusion;
+
+        const colorMap = { 'Azul': '#2a6f97', 'Rojo': '#c73e3e', 'Amarillo': '#e8a838', 'Verde': '#3a8c5a' };
+        const colorHex = { 'Azul': 0x2a6f97, 'Rojo': 0xc73e3e, 'Amarillo': 0xe8a838, 'Verde': 0x3a8c5a };
+
+        // ============================================================
         //  FUNCIÓN PARA CARGAR DATOS
         // ============================================================
-        async function loadData() {
-            try {
-                // Intentar conexión directa primero
-                let url = SCRIPT_URL + '?t=' + Date.now();
-                console.log('🔗 Intentando conexión directa:', url);
+        async function loadDataFromSheets() {
+            if (isLoading) return;
+            isLoading = true;
 
-                let response = await fetch(url, {
+            const loading = document.getElementById('loading');
+            const loadingStatus = document.getElementById('loadingStatus');
+            const btnRefresh = document.getElementById('btnRefresh');
+            const refreshBadge = document.getElementById('refreshBadge');
+
+            loading.classList.remove('hidden');
+            loadingStatus.textContent = 'Conectando con Google Sheets...';
+            btnRefresh.disabled = true;
+            refreshBadge.textContent = '⏳';
+            refreshBadge.classList.add('loading');
+
+            try {
+                const url = SHEET_URL + '&_t=' + Date.now();
+                console.log('🔗 URL de conexión (con proxy):', url);
+
+                const response = await fetch(url, {
                     cache: 'no-cache',
                     headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate'
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
                     }
                 });
-
-                // Si falla, intentar con proxy
-                if (!response.ok) {
-                    console.log('🔄 Conexión directa falló, usando proxy...');
-                    useProxy = true;
-                    const proxyUrl = 'https://corsproxy.io/?url=' + encodeURIComponent(SCRIPT_URL);
-                    url = proxyUrl + '&t=' + Date.now();
-                    response = await fetch(url, {
-                        cache: 'no-cache',
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate'
-                        }
-                    });
-                }
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const text = await response.text();
-                console.log('📄 Respuesta recibida (primeros 100 caracteres):', text.substring(0, 100));
+                console.log('📄 Respuesta del servidor (primeros 200 caracteres):', text.substring(0, 200));
+                loadingStatus.textContent = 'Procesando datos...';
 
                 let data;
                 try {
                     data = JSON.parse(text);
                 } catch (e) {
-                    throw new Error('No es JSON válido');
+                    throw new Error('La respuesta no es JSON válido. Verifica la URL del script.');
                 }
 
-                // Verificar si hay error
                 if (data && data.error) {
                     throw new Error(data.error);
                 }
 
-                // Extraer datos
                 let rows = data;
                 if (data.data && Array.isArray(data.data)) {
                     rows = data.data;
@@ -309,10 +671,9 @@
                 }
 
                 if (!rows || rows.length === 0) {
-                    throw new Error('No hay datos');
+                    throw new Error('No se encontraron datos en la hoja.');
                 }
 
-                // Mapear datos
                 const newData = rows.map(row => ({
                     nombre: row.Nombre || row.nombre || '',
                     proceso: row['Proceso/Subproceso'] || row.proceso || row['Proceso'] || '',
@@ -323,53 +684,120 @@
                 })).filter(l => l.nombre !== '' && l.principal !== '');
 
                 if (newData.length === 0) {
-                    throw new Error('No hay datos válidos');
+                    throw new Error('No se encontraron datos válidos en la hoja. Verifica los nombres de las columnas.');
                 }
 
                 leadersData = newData;
-                console.log(`✅ ${leadersData.length} líderes cargados`);
+                lastUpdateTime = new Date();
 
-                // Actualizar UI
+                loadingStatus.textContent = `✅ ${leadersData.length} líderes cargados correctamente`;
+
                 document.getElementById('leaderCount').textContent = leadersData.length;
-                document.getElementById('stats').innerHTML = `🌟 Líderes: <span id="leaderCount">${leadersData.length}</span> · ✅ Conectado`;
+                document.getElementById('lastUpdate').textContent = lastUpdateTime.toLocaleString('es-CO');
 
-                // Regenerar galaxia
                 regenerateGalaxy();
 
-            } catch (error) {
-                console.error('❌ Error:', error);
-                document.getElementById('stats').innerHTML = `🌟 Líderes: <span id="leaderCount">${leadersData.length || 0}</span> · ⚠️ Sin conexión (usando datos de ejemplo)`;
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                    btnRefresh.disabled = false;
+                    refreshBadge.textContent = '✅';
+                    refreshBadge.classList.remove('loading');
+                    setTimeout(() => {
+                        refreshBadge.textContent = 'Auto';
+                    }, 3000);
+                }, 800);
 
-                // Usar datos de ejemplo
+            } catch (error) {
+                console.error('❌ Error cargando datos:', error);
+                loadingStatus.textContent = `❌ Error: ${error.message}`;
+
                 if (leadersData.length === 0) {
-                    leadersData = exampleData;
-                    document.getElementById('leaderCount').textContent = leadersData.length;
-                    regenerateGalaxy();
+                    loadingStatus.textContent = '⚠️ Usando datos de ejemplo. Verifica la conexión con Google Sheets.';
+                    useExampleData();
                 }
+
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                    btnRefresh.disabled = false;
+                    refreshBadge.textContent = '⚠️';
+                    refreshBadge.classList.remove('loading');
+                    setTimeout(() => {
+                        refreshBadge.textContent = 'Auto';
+                    }, 3000);
+                }, 1500);
             }
+
+            isLoading = false;
+        }
+
+        function useExampleData() {
+            leadersData = exampleData;
+            document.getElementById('leaderCount').textContent = leadersData.length;
+            document.getElementById('lastUpdate').textContent = 'Datos de ejemplo (sin conexión)';
+            regenerateGalaxy();
         }
 
         // ============================================================
-        //  INICIALIZAR THREE.JS
+        //  REGENERAR GALAXIA
+        // ============================================================
+        function regenerateGalaxy() {
+            if (allLeaderObjects.length > 0) {
+                allLeaderObjects.forEach(obj => {
+                    if (obj.group.parent) {
+                        obj.group.parent.remove(obj.group);
+                    }
+                });
+                allLeaderObjects = [];
+                leaderMeshes = [];
+            }
+
+            createLeaders();
+            document.getElementById('leaderCount').textContent = leadersData.length;
+        }
+
+        function refreshData() {
+            const btnRefresh = document.getElementById('btnRefresh');
+            const refreshBadge = document.getElementById('refreshBadge');
+            btnRefresh.disabled = true;
+            refreshBadge.textContent = '⏳';
+            refreshBadge.classList.add('loading');
+
+            loadDataFromSheets().finally(() => {
+                btnRefresh.disabled = false;
+            });
+        }
+
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(() => {
+                console.log('🔄 Actualizando datos automáticamente...');
+                loadDataFromSheets();
+            }, 60000);
+        }
+
+        // ============================================================
+        //  THREE.JS - INICIALIZAR
         // ============================================================
         function initThreeJS() {
-            const container = document.getElementById('galaxy-container');
-            const canvas = document.getElementById('galaxyCanvas');
+            modalOverlay = document.getElementById('modalOverlay');
+            modalTitle = document.getElementById('modalTitle');
+            modalSubtitle = document.getElementById('modalSubtitle');
+            badgeContainer = document.getElementById('badgeContainer');
+            modalBody = document.getElementById('modalBody');
+            modalConclusion = document.getElementById('modalConclusion');
 
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x050812);
 
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-
-            camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 1000);
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(6, 4, 10);
 
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            renderer.setSize(w, h);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             renderer.toneMappingExposure = 1.2;
+            document.body.appendChild(renderer.domElement);
 
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
@@ -380,53 +808,64 @@
             controls.minDistance = 2;
             controls.target.set(0, 0, 0);
 
-            // Crear galaxia de fondo
-            createGalaxy();
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
 
-            // Crear líderes
+            createStarField();
+            createNebulaGas();
+            createBrightCore();
+            createBrightStars();
             createLeaders();
 
-            // Eventos
             window.addEventListener('resize', onResize);
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('click', onClick);
 
             animate();
         }
 
         // ============================================================
-        //  CREAR GALAXIA DE FONDO
+        //  CREAR ELEMENTOS DE LA GALAXIA
         // ============================================================
-        function createGalaxy() {
-            const count = 4000;
+        function createStarField() {
+            const count = 6000;
             const positions = new Float32Array(count * 3);
             const colors = new Float32Array(count * 3);
+            const sizes = new Float32Array(count);
 
             for (let i = 0; i < count; i++) {
                 const i3 = i * 3;
-                const radius = 0.5 + Math.pow(Math.random(), 0.7) * 4.5;
-                const angle = radius * 2.5 + Math.random() * 0.5;
-                const scatter = 0.05 + radius * 0.03;
-                const height = (Math.random() - 0.5) * (0.4 + radius * 0.04);
+                const radius = 3 + Math.random() * 15;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
 
-                positions[i3] = Math.cos(angle) * radius + (Math.random() - 0.5) * scatter;
-                positions[i3 + 1] = height * 1.5;
-                positions[i3 + 2] = Math.sin(angle) * radius + (Math.random() - 0.5) * scatter;
+                positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+                positions[i3 + 1] = radius * Math.cos(phi) * 0.6;
+                positions[i3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
 
                 const brightness = 0.3 + Math.random() * 0.7;
                 const temp = Math.random();
-                if (temp < 0.5) {
+                if (temp < 0.3) {
                     colors[i3] = 0.6 * brightness;
                     colors[i3 + 1] = 0.7 * brightness;
                     colors[i3 + 2] = 1.0 * brightness;
+                } else if (temp < 0.6) {
+                    colors[i3] = 1.0 * brightness;
+                    colors[i3 + 1] = 1.0 * brightness;
+                    colors[i3 + 2] = 1.0 * brightness;
                 } else {
                     colors[i3] = 1.0 * brightness;
-                    colors[i3 + 1] = 0.8 * brightness;
-                    colors[i3 + 2] = 0.5 * brightness;
+                    colors[i3 + 1] = 0.7 * brightness;
+                    colors[i3 + 2] = 0.3 * brightness;
                 }
+
+                sizes[i] = 0.02 + Math.random() * 0.08;
             }
 
             const geo = new THREE.BufferGeometry();
             geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
             const canvas = document.createElement('canvas');
             canvas.width = 32;
@@ -448,31 +887,302 @@
                 transparent: true,
                 vertexColors: true,
                 sizeAttenuation: true,
-                opacity: 0.7
+                opacity: 0.6
             });
 
             const stars = new THREE.Points(geo, mat);
             scene.add(stars);
         }
 
+        function createNebulaGas() {
+            const cloudCount = 4000;
+            const positions = new Float32Array(cloudCount * 3);
+            const colors = new Float32Array(cloudCount * 3);
+            const sizes = new Float32Array(cloudCount);
+
+            for (let i = 0; i < cloudCount; i++) {
+                const i3 = i * 3;
+                const radius = Math.pow(Math.random(), 0.5) * 5;
+                const angle = Math.random() * Math.PI * 2;
+                const height = (Math.random() - 0.5) * 1.5 * (1 - radius / 6);
+
+                positions[i3] = Math.cos(angle) * radius * (0.8 + 0.2 * Math.sin(angle * 3));
+                positions[i3 + 1] = height * 0.8 + Math.sin(angle * 2) * 0.3;
+                positions[i3 + 2] = Math.sin(angle) * radius * (0.8 + 0.2 * Math.cos(angle * 3));
+
+                const dist = Math.sqrt(positions[i3] * positions[i3] + positions[i3 + 1] * positions[i3 + 1] + positions[i3 + 2] * positions[i3 + 2]);
+
+                if (dist < 1.5) {
+                    const t = Math.random();
+                    colors[i3] = 0.4 + 0.3 * t;
+                    colors[i3 + 1] = 0.1 + 0.3 * t;
+                    colors[i3 + 2] = 0.4 + 0.4 * t;
+                } else if (dist < 3) {
+                    const mix = (dist - 1.5) / 1.5;
+                    colors[i3] = 0.5 + 0.5 * mix * (0.5 + 0.5 * Math.random());
+                    colors[i3 + 1] = 0.1 + 0.3 * (1 - mix) + 0.3 * mix * Math.random();
+                    colors[i3 + 2] = 0.3 + 0.3 * (1 - mix);
+                } else {
+                    colors[i3] = 0.6 + 0.4 * Math.random();
+                    colors[i3 + 1] = 0.2 + 0.3 * Math.random();
+                    colors[i3 + 2] = 0.05 + 0.1 * Math.random();
+                }
+
+                sizes[i] = 0.05 + Math.random() * 0.2;
+            }
+
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, 'rgba(255,255,255,0.6)');
+            grad.addColorStop(0.3, 'rgba(255,255,255,0.3)');
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 64, 64);
+            const texture = new THREE.CanvasTexture(canvas);
+
+            const mat = new THREE.PointsMaterial({
+                size: 0.3,
+                map: texture,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                transparent: true,
+                vertexColors: true,
+                sizeAttenuation: true,
+                opacity: 0.5
+            });
+
+            const cloud = new THREE.Points(geo, mat);
+            scene.add(cloud);
+            nebulaParticles.push(cloud);
+
+            const cloudCount2 = 2000;
+            const pos2 = new Float32Array(cloudCount2 * 3);
+            const col2 = new Float32Array(cloudCount2 * 3);
+
+            for (let i = 0; i < cloudCount2; i++) {
+                const i3 = i * 3;
+                const radius = Math.pow(Math.random(), 0.4) * 6;
+                const angle = Math.random() * Math.PI * 2;
+                const height = (Math.random() - 0.5) * 2.5 * (1 - radius / 7);
+
+                pos2[i3] = Math.cos(angle) * radius;
+                pos2[i3 + 1] = height;
+                pos2[i3 + 2] = Math.sin(angle) * radius;
+
+                const dist = Math.sqrt(pos2[i3] * pos2[i3] + pos2[i3 + 1] * pos2[i3 + 1] + pos2[i3 + 2] * pos2[i3 + 2]);
+                if (dist < 2) {
+                    col2[i3] = 0.3;
+                    col2[i3 + 1] = 0.1;
+                    col2[i3 + 2] = 0.4;
+                } else {
+                    col2[i3] = 0.5;
+                    col2[i3 + 1] = 0.2;
+                    col2[i3 + 2] = 0.1;
+                }
+            }
+
+            const geo2 = new THREE.BufferGeometry();
+            geo2.setAttribute('position', new THREE.BufferAttribute(pos2, 3));
+            geo2.setAttribute('color', new THREE.BufferAttribute(col2, 3));
+
+            const mat2 = new THREE.PointsMaterial({
+                size: 0.6,
+                map: texture,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                transparent: true,
+                vertexColors: true,
+                sizeAttenuation: true,
+                opacity: 0.15
+            });
+
+            const cloud2 = new THREE.Points(geo2, mat2);
+            scene.add(cloud2);
+            nebulaParticles.push(cloud2);
+        }
+
+        function createBrightCore() {
+            const coreGeo = new THREE.SphereGeometry(0.8, 32, 32);
+            const coreMat = new THREE.MeshBasicMaterial({
+                color: 0x88ccff,
+                transparent: true,
+                opacity: 0.2
+            });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            scene.add(core);
+
+            const innerGeo = new THREE.SphereGeometry(0.3, 16, 16);
+            const innerMat = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.4
+            });
+            const inner = new THREE.Mesh(innerGeo, innerMat);
+            scene.add(inner);
+
+            const glowCount = 800;
+            const positions = new Float32Array(glowCount * 3);
+            const colors = new Float32Array(glowCount * 3);
+
+            for (let i = 0; i < glowCount; i++) {
+                const i3 = i * 3;
+                const radius = 0.1 + Math.random() * 1.2;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+
+                positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+                positions[i3 + 1] = radius * Math.cos(phi) * 0.5;
+                positions[i3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+
+                const temp = Math.random();
+                if (temp < 0.7) {
+                    colors[i3] = 0.8 + 0.2 * Math.random();
+                    colors[i3 + 1] = 0.8 + 0.2 * Math.random();
+                    colors[i3 + 2] = 1.0;
+                } else {
+                    colors[i3] = 0.6 + 0.4 * Math.random();
+                    colors[i3 + 1] = 0.2 + 0.3 * Math.random();
+                    colors[i3 + 2] = 0.6 + 0.4 * Math.random();
+                }
+            }
+
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, 'rgba(255,255,255,1)');
+            grad.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 64, 64);
+            const texture = new THREE.CanvasTexture(canvas);
+
+            const mat = new THREE.PointsMaterial({
+                size: 0.08,
+                map: texture,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                transparent: true,
+                vertexColors: true,
+                sizeAttenuation: true
+            });
+
+            const glow = new THREE.Points(geo, mat);
+            scene.add(glow);
+            glowParticles.push(glow);
+
+            const light = new THREE.PointLight(0x88ccff, 0.8, 5);
+            light.position.set(0, 0, 0);
+            scene.add(light);
+        }
+
+        function createBrightStars() {
+            const starPositions = [
+                { x: -2.5, y: 1.8, z: 1.2, color: 0x88ccff, size: 0.6 },
+                { x: 3.0, y: 1.2, z: -0.8, color: 0xffd700, size: 0.5 },
+                { x: -1.8, y: -1.5, z: 2.8, color: 0xff6b6b, size: 0.4 },
+                { x: 2.2, y: -0.8, z: -2.5, color: 0x64b5f6, size: 0.5 },
+                { x: 0.5, y: 2.5, z: -1.0, color: 0xffb74d, size: 0.4 },
+                { x: -0.8, y: -2.2, z: -1.5, color: 0x4fc3f7, size: 0.4 },
+            ];
+
+            starPositions.forEach((pos) => {
+                createDiffractionStar(pos.x, pos.y, pos.z, pos.color, pos.size);
+            });
+        }
+
+        function createDiffractionStar(x, y, z, color, size) {
+            const group = new THREE.Group();
+
+            const coreGeo = new THREE.SphereGeometry(size * 0.3, 12, 12);
+            const coreMat = new THREE.MeshBasicMaterial({ color: color });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            group.add(core);
+
+            const spikeLength = size * 3;
+            const spikeWidth = size * 0.04;
+
+            for (let i = 0; i < 4; i++) {
+                const angle = (i / 4) * Math.PI * 2 + Math.PI / 4;
+                const geometry = new THREE.PlaneGeometry(spikeLength, spikeWidth);
+                const material = new THREE.MeshBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: 0.6,
+                    side: THREE.DoubleSide,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                const spike = new THREE.Mesh(geometry, material);
+                spike.position.x = Math.cos(angle) * spikeLength * 0.5;
+                spike.position.z = Math.sin(angle) * spikeLength * 0.5;
+                spike.rotation.y = -angle;
+                spike.rotation.x = 0.15;
+                group.add(spike);
+
+                const spike2 = new THREE.Mesh(
+                    new THREE.PlaneGeometry(spikeLength * 0.7, spikeWidth * 0.5),
+                    new THREE.MeshBasicMaterial({
+                        color: color,
+                        transparent: true,
+                        opacity: 0.3,
+                        side: THREE.DoubleSide,
+                        blending: THREE.AdditiveBlending,
+                        depthWrite: false
+                    })
+                );
+                spike2.position.x = Math.cos(angle + Math.PI / 4) * spikeLength * 0.35;
+                spike2.position.z = Math.sin(angle + Math.PI / 4) * spikeLength * 0.35;
+                spike2.rotation.y = -(angle + Math.PI / 4);
+                spike2.rotation.x = 0.1;
+                group.add(spike2);
+            }
+
+            const glowGeo = new THREE.SphereGeometry(size * 0.8, 16, 16);
+            const glowMat = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.15,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            const glow = new THREE.Mesh(glowGeo, glowMat);
+            group.add(glow);
+
+            group.position.set(x, y, z);
+            scene.add(group);
+
+            group.userData = { angle: Math.random() * Math.PI * 2, speed: 0.2 + Math.random() * 0.3 };
+            window.brightStars = window.brightStars || [];
+            window.brightStars.push(group);
+        }
+
         // ============================================================
         //  CREAR LÍDERES
         // ============================================================
         function createLeaders() {
-            if (allLeaderObjects.length > 0) {
-                allLeaderObjects.forEach(obj => {
-                    if (obj.group.parent) {
-                        obj.group.parent.remove(obj.group);
-                    }
-                });
-                allLeaderObjects = [];
-                leaderMeshes = [];
+            const numLeaders = leadersData.length;
+
+            if (numLeaders === 0) {
+                console.warn('No hay líderes para mostrar');
+                return;
             }
 
-            const numLeaders = leadersData.length;
-            if (numLeaders === 0) return;
-
             const positions = [];
+
             for (let i = 0; i < numLeaders; i++) {
                 const t = (i / numLeaders) * 0.9 + 0.05;
                 const angle = t * Math.PI * 5 + (i % 3) * Math.PI * 2 / 3;
@@ -492,7 +1202,7 @@
 
                 const group = new THREE.Group();
 
-                const sphereGeo = new THREE.SphereGeometry(0.15, 16, 16);
+                const sphereGeo = new THREE.SphereGeometry(0.12, 16, 16);
                 const sphereMat = new THREE.MeshStandardMaterial({
                     color: color,
                     emissive: color,
@@ -505,7 +1215,7 @@
                 group.add(sphere);
 
                 const ringColor = colorHex[leader.secundario] || 0x888888;
-                const ringGeo = new THREE.RingGeometry(0.17, 0.20, 32);
+                const ringGeo = new THREE.RingGeometry(0.14, 0.17, 32);
                 const ringMat = new THREE.MeshBasicMaterial({
                     color: ringColor,
                     side: THREE.DoubleSide,
@@ -517,7 +1227,22 @@
                 const ring = new THREE.Mesh(ringGeo, ringMat);
                 ring.position.y = 0;
                 ring.lookAt(0, 0, 0);
+                ring.userData = { parent: sphere };
                 group.add(ring);
+
+                const glowGeo = new THREE.SphereGeometry(0.2, 16, 16);
+                const glowMat = new THREE.MeshBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: 0.15,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                const glow = new THREE.Mesh(glowGeo, glowMat);
+                group.add(glow);
+
+                const light = new THREE.PointLight(color, 0.2, 1.0);
+                group.add(light);
 
                 group.position.set(pos.x, pos.y, pos.z);
                 scene.add(group);
@@ -530,15 +1255,224 @@
                     idx: idx
                 });
 
+                const canvas = document.createElement('canvas');
+                canvas.width = 48;
+                canvas.height = 24;
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, 48, 24);
+                ctx.font = 'Bold 10px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                const initials = leader.nombre.split(' ').filter(w => w.length > 1).map(w => w[0]).join('').slice(0, 2);
+                ctx.fillText(initials, 24, 12);
+
+                const texture = new THREE.CanvasTexture(canvas);
+                const spriteMat = new THREE.SpriteMaterial({
+                    map: texture,
+                    transparent: true,
+                    depthWrite: false,
+                    opacity: 0.6
+                });
+                const sprite = new THREE.Sprite(spriteMat);
+                sprite.position.set(0, 0.35, 0);
+                sprite.scale.set(0.35, 0.18, 1);
+                group.add(sprite);
+
                 leaderMeshes.push(sphere);
             });
         }
 
         // ============================================================
-        //  REGENERAR GALAXIA
+        //  INTERACCIÓN
         // ============================================================
-        function regenerateGalaxy() {
-            createLeaders();
+        function onMouseMove(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(leaderMeshes);
+
+            const tooltip = document.getElementById('tooltip');
+
+            if (intersects.length > 0) {
+                const obj = intersects[0].object;
+                const leader = obj.userData.leader;
+                if (leader) {
+                    tooltip.style.display = 'block';
+                    const left = Math.min(event.clientX + 15, window.innerWidth - 200);
+                    const top = Math.min(event.clientY - 10, window.innerHeight - 80);
+                    tooltip.style.left = left + 'px';
+                    tooltip.style.top = top + 'px';
+                    document.getElementById('ttName').textContent = leader.nombre;
+                    document.getElementById('ttProcess').textContent = leader.proceso;
+                    document.getElementById('ttColors').innerHTML = `
+                            <span class="tt-dot ${leader.principal.toLowerCase()}"></span>
+                            <span class="tt-dot ${leader.secundario.toLowerCase()}"></span>
+                            <span class="tt-label">${leader.principal} / ${leader.secundario}</span>
+                        `;
+                    renderer.domElement.style.cursor = 'pointer';
+                    hoveredLeader = leader;
+
+                    allLeaderObjects.forEach(obj2 => {
+                        const isHovered = obj2.leader === leader;
+                        obj2.group.children.forEach(child => {
+                            if (child.isMesh && child.material && child.material.emissiveIntensity !== undefined) {
+                                child.material.emissiveIntensity = isHovered ? 1.0 : 0.3;
+                            }
+                        });
+                    });
+                    return;
+                }
+            }
+
+            tooltip.style.display = 'none';
+            renderer.domElement.style.cursor = 'default';
+            hoveredLeader = null;
+
+            allLeaderObjects.forEach(obj2 => {
+                obj2.group.children.forEach(child => {
+                    if (child.isMesh && child.material && child.material.emissiveIntensity !== undefined) {
+                        child.material.emissiveIntensity = 0.5;
+                    }
+                });
+            });
+        }
+
+        function onClick(event) {
+            if (hoveredLeader) {
+                selectedLeader = hoveredLeader;
+                openAnalysisModal(selectedLeader);
+            }
+        }
+
+        // ============================================================
+        //  MODAL DE ANÁLISIS
+        // ============================================================
+        function openAnalysisModal(leader) {
+            if (!leader) return;
+
+            const pColor = leader.principal;
+            const sColor = leader.secundario;
+            const pDesc = colorDescriptions[pColor] || {};
+            const sDesc = colorDescriptions[sColor] || {};
+
+            modalTitle.textContent = `🔍 ${leader.nombre}`;
+            modalSubtitle.textContent = `${leader.cargo} · ${leader.proceso}`;
+
+            badgeContainer.innerHTML = `
+                    <span class="badge badge-${pColor.toLowerCase()}">🎯 ${pColor} (Principal)</span>
+                    <span class="badge badge-${sColor.toLowerCase()}">🔄 ${sColor} (Secundario)</span>
+                `;
+
+            modalBody.innerHTML = `
+                    <div class="analysis-section" style="border-left-color: #2a6f97;">
+                        <h4>1. 🧭 Identidad de liderazgo</h4>
+                        <p>
+                            <strong>${leader.nombre}</strong> tiene un estilo de liderazgo híbrido que combina 
+                            <span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span> como color principal y 
+                            <span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span> como secundario.
+                            Esto significa que su identidad se caracteriza por: 
+                            <span class="highlight">${pDesc.caracteristicas?.toLowerCase() || '—'}</span> 
+                            complementado con <span class="highlight">${sDesc.caracteristicas?.toLowerCase() || '—'}</span>.
+                            Su tendencia natural será inclinarse hacia el estilo <span class="highlight">${pColor}</span> en la mayoría de las circunstancias.
+                        </p>
+                    </div>
+
+                    <div class="analysis-section" style="border-left-color: #c73e3e;">
+                        <h4>2. ⚠️ Zona de riesgo bajo presión</h4>
+                        <p>
+                            Cuando <strong>${leader.nombre}</strong> se encuentra bajo presión o en situaciones de estrés, 
+                            su comportamiento puede manifestar aspectos negativos de su estilo principal:
+                            <span class="highlight">${pDesc.diaMalo?.toLowerCase() || '—'}</span>.
+                            Adicionalmente, su lado secundario (<span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span>) puede exacerbarse mostrando 
+                            <span class="highlight">${sDesc.diaMalo?.toLowerCase() || '—'}</span>.
+                        </p>
+                    </div>
+
+                    <div class="analysis-section" style="border-left-color: #e8a838;">
+                        <h4>3. 🌿 Ambiente y motivadores ideales</h4>
+                        <p>
+                            <strong>${leader.nombre}</strong> se desempeña mejor en entornos que ofrecen:
+                            <span class="highlight">${pDesc.ambienteIdeal?.toLowerCase() || '—'}</span> 
+                            (según su estilo <span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span>) y 
+                            <span class="highlight">${sDesc.ambienteIdeal?.toLowerCase() || '—'}</span> 
+                            (según su estilo <span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span>).
+                            <br><br>
+                            <strong>Motivadores clave:</strong> 
+                            <span class="highlight">${pDesc.lesGusta?.toLowerCase() || '—'}</span> 
+                            (<span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span>) y 
+                            <span class="highlight">${sDesc.lesGusta?.toLowerCase() || '—'}</span> 
+                            (<span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span>).
+                        </p>
+                    </div>
+
+                    <div class="analysis-section" style="border-left-color: #3a8c5a;">
+                        <h4>4. 💡 Cómo llegarle con fuerza</h4>
+                        <p>
+                            Para comunicarse efectivamente con <strong>${leader.nombre}</strong> y obtener su compromiso, 
+                            se recomienda:
+                            <br><br>
+                            <strong>Desde su estilo <span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span>:</strong> 
+                            <span class="highlight">${pDesc.comoLlegar || '—'}</span><br>
+                            <strong>Desde su estilo <span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span>:</strong> 
+                            <span class="highlight">${sDesc.comoLlegar || '—'}</span><br><br>
+                            <strong>Estrategia integrada:</strong> Combina enfoque directo con escucha activa, 
+                            proporciona datos concretos pero también espacio para la innovación, 
+                            y reconoce tanto los resultados como el proceso.
+                        </p>
+                    </div>
+
+                    <div class="analysis-section" style="border-left-color: #1a3a6a;">
+                        <h4>5. 🏆 Aporte a la organización</h4>
+                        <p>
+                            <strong>${leader.nombre}</strong> aporta valor a la organización a través de:
+                            <br><br>
+                            <strong>Desde <span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span>:</strong> 
+                            <span class="highlight">${pDesc.aporte || '—'}</span><br>
+                            <strong>Desde <span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span>:</strong> 
+                            <span class="highlight">${sDesc.aporte || '—'}</span><br><br>
+                            <strong>Valor único de su combinación:</strong> 
+                            La fusión de <span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span> y 
+                            <span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span> le permite 
+                            ${pColor === 'Rojo' ? 'impulsar acciones concretas' : 'generar estabilidad'} 
+                            mientras ${sColor === 'Verde' ? 'construye relaciones sólidas' : 'aporta dinamismo'}, 
+                            creando un liderazgo equilibrado y versátil.
+                        </p>
+                    </div>
+
+                    <div class="analysis-section" style="border-left-color: #8a2a4a;">
+                        <h4>6. 🚨 Riesgos a gestionar</h4>
+                        <p>
+                            <strong>Riesgos asociados al estilo <span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span>:</strong> 
+                            <span class="highlight">${pDesc.riesgo || '—'}</span><br>
+                            <strong>Riesgos asociados al estilo <span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span>:</strong> 
+                            <span class="highlight">${sDesc.riesgo || '—'}</span><br><br>
+                            <strong>Recomendaciones para mitigar riesgos:</strong>
+                            <br>
+                            • Fomentar la autoconciencia sobre sus patrones de comportamiento bajo presión.<br>
+                            • Buscar feedback regular de su equipo para identificar puntos ciegos.<br>
+                            • Desarrollar estrategias para equilibrar su estilo natural con la flexibilidad necesaria.<br>
+                            • Rodearse de personas con estilos complementarios que contrarresten sus debilidades.
+                        </p>
+                    </div>
+                `;
+
+            modalConclusion.innerHTML = `
+                    📌 <strong>Conclusión:</strong> ${leader.nombre} es un líder con estilo 
+                    <span class="color-tag tag-${pColor.toLowerCase()}">${pColor}</span> 
+                    potenciado por <span class="color-tag tag-${sColor.toLowerCase()}">${sColor}</span>. 
+                    Su efectividad dependerá de su capacidad para gestionar sus fortalezas y mitigar los riesgos asociados a su perfil.
+                `;
+
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         // ============================================================
@@ -556,6 +1490,12 @@
             document.querySelector('.controls button:nth-child(2)').textContent = isRotating ? '⏸ Pausar' : '▶ Reanudar';
         }
 
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
         // ============================================================
         //  ANIMACIÓN
         // ============================================================
@@ -568,34 +1508,60 @@
                     obj.ring.rotation.x += 0.01;
                     obj.ring.rotation.y += 0.015;
                 }
+                const time = Date.now() / 8000;
+                const offset = idx * 0.1;
+                obj.group.position.y += Math.sin(time + offset) * 0.00008;
             });
+
+            if (window.brightStars) {
+                window.brightStars.forEach((star, i) => {
+                    star.rotation.z += 0.002;
+                    star.rotation.x += 0.001;
+                    const pulse = 1 + 0.05 * Math.sin(Date.now() / 2000 + i);
+                    star.scale.set(pulse, pulse, pulse);
+                });
+            }
+
+            nebulaParticles.forEach((cloud, i) => {
+                cloud.rotation.y += 0.0002 * (i + 1);
+            });
+
+            if (glowParticles.length > 0) {
+                const pulse = 0.8 + 0.2 * Math.sin(Date.now() / 1500);
+                glowParticles[0].material.opacity = pulse * 0.8;
+            }
 
             renderer.render(scene, camera);
         }
 
         // ============================================================
-        //  RESIZE
+        //  EVENTOS
         // ============================================================
-        function onResize() {
-            const container = document.getElementById('galaxy-container');
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-            renderer.setSize(w, h);
-        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+
+        // ============================================================
+        //  EXPONER FUNCIONES
+        // ============================================================
+        window.resetView = resetView;
+        window.toggleRotation = toggleRotation;
+        window.closeModal = closeModal;
+        window.openAnalysisModal = openAnalysisModal;
+        window.refreshData = refreshData;
 
         // ============================================================
         //  INICIO
         // ============================================================
         window.onload = function() {
             initThreeJS();
-            loadData();
+            loadDataFromSheets();
+            startAutoRefresh();
         };
-
-        window.resetView = resetView;
-        window.toggleRotation = toggleRotation;
-        window.loadData = loadData;
     </script>
 </body>
 </html>
