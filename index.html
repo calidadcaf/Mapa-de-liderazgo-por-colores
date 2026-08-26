@@ -17,7 +17,6 @@
             background: #050812;
         }
 
-        /* ===== INFO SUPERIOR ===== */
         #info {
             position: absolute;
             top: 20px;
@@ -58,7 +57,6 @@
             -webkit-text-fill-color: #8899bb;
         }
 
-        /* ===== INDICADOR DE CARGA ===== */
         #loading {
             position: absolute;
             top: 50%;
@@ -250,6 +248,16 @@
             border-radius: 12px;
             font-size: 10px;
             color: #64b5f6;
+        }
+
+        .btn-refresh .badge.loading {
+            color: #ffd54f;
+            animation: pulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         /* ============================================================
@@ -518,17 +526,20 @@
 
     <script>
         // ============================================================
-        //  ⭐ CONFIGURACIÓN - GOOGLE SHEETS
+        //  ⭐ CONFIGURACIÓN - GOOGLE SHEETS CON ANTI-CACHÉ
         // ============================================================
-        
+
         // 🔑 ID DE TU GOOGLE SHEETS
         const SHEET_ID = '1S8O7hVqRym-8-TBuU-Bnw-Ad1yuJebtAizcq3hHfHIg';
-        
+
         // Nombre de la hoja (pestaña) donde están los datos
         const SHEET_NAME = 'base';
-        
-        // URL para obtener los datos en formato JSON
-        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
+        // ⭐ FUNCIÓN PARA GENERAR URL CON ANTI-CACHÉ
+        function getSheetUrl() {
+            const timestamp = Date.now(); // Evita la caché del navegador
+            return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&_=${timestamp}`;
+        }
 
         // ============================================================
         //  ESTADO GLOBAL
@@ -545,6 +556,7 @@
         let selectedLeader = null;
         let isLoading = false;
         let lastUpdateTime = null;
+        let autoRefreshInterval = null;
 
         // Variables para el modal
         let modalOverlay, modalTitle, modalSubtitle, badgeContainer, modalBody, modalConclusion;
@@ -595,7 +607,7 @@
         };
 
         // ============================================================
-        //  FUNCIÓN PARA CARGAR DATOS DESDE GOOGLE SHEETS
+        //  FUNCIÓN PARA CARGAR DATOS DESDE GOOGLE SHEETS (CON ANTI-CACHÉ)
         // ============================================================
         async function loadDataFromSheets() {
             if (isLoading) return;
@@ -610,10 +622,20 @@
             loadingStatus.textContent = 'Conectando con Google Sheets...';
             btnRefresh.disabled = true;
             refreshBadge.textContent = '⏳';
+            refreshBadge.classList.add('loading');
 
             try {
-                const response = await fetch(SHEET_URL);
-                
+                // ⭐ USAR URL CON ANTI-CACHÉ
+                const url = getSheetUrl();
+                const response = await fetch(url, {
+                    cache: 'no-cache',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -644,7 +666,7 @@
                 for (const [key, index] of Object.entries(colIndex)) {
                     if (index === -1) missingCols.push(key);
                 }
-                
+
                 if (missingCols.length > 0) {
                     throw new Error(`Columnas no encontradas: ${missingCols.join(', ')}. Verifica los nombres en tu Google Sheets.`);
                 }
@@ -670,6 +692,10 @@
                     throw new Error('No se encontraron datos en la hoja. Verifica que tenga datos y que los nombres de las columnas sean correctos.');
                 }
 
+                // ⭐ COMPARAR CON DATOS ANTERIORES PARA SABER SI HUBO CAMBIOS
+                const oldDataLength = leadersData.length;
+                const hasChanges = oldDataLength !== newData.length || JSON.stringify(leadersData) !== JSON.stringify(newData);
+
                 leadersData = newData;
                 lastUpdateTime = new Date();
 
@@ -679,13 +705,19 @@
                 document.getElementById('leaderCount').textContent = leadersData.length;
                 document.getElementById('lastUpdate').textContent = lastUpdateTime.toLocaleString('es-CO');
 
-                // Regenerar la galaxia con los nuevos datos
-                regenerateGalaxy();
+                // ⭐ REGENERAR LA GALAXIA SOLO SI HUBO CAMBIOS
+                if (hasChanges) {
+                    regenerateGalaxy();
+                    loadingStatus.textContent = `🔄 Galaxia actualizada (${leadersData.length} líderes)`;
+                } else {
+                    loadingStatus.textContent = `✅ Sin cambios (${leadersData.length} líderes)`;
+                }
 
                 setTimeout(() => {
                     loading.classList.add('hidden');
                     btnRefresh.disabled = false;
                     refreshBadge.textContent = '✅';
+                    refreshBadge.classList.remove('loading');
                     setTimeout(() => {
                         refreshBadge.textContent = 'Auto';
                     }, 3000);
@@ -694,7 +726,7 @@
             } catch (error) {
                 console.error('❌ Error cargando datos:', error);
                 loadingStatus.textContent = `❌ Error: ${error.message}`;
-                
+
                 if (leadersData.length === 0) {
                     loadingStatus.textContent = '⚠️ Usando datos de ejemplo. Verifica la conexión con Google Sheets.';
                     useExampleData();
@@ -704,6 +736,7 @@
                     loading.classList.add('hidden');
                     btnRefresh.disabled = false;
                     refreshBadge.textContent = '⚠️';
+                    refreshBadge.classList.remove('loading');
                     setTimeout(() => {
                         refreshBadge.textContent = 'Auto';
                     }, 3000);
@@ -718,35 +751,64 @@
         // ============================================================
         function useExampleData() {
             leadersData = [
-                { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera", principal: "Amarillo", secundario: "Verde" },
-                { nombre: "Javier Fernando Jérez Ortega", proceso: "Contabilidad", cargo: "Ingeniero de Sistemas", principal: "Amarillo", secundario: "Verde" },
-                { nombre: "Abel Dario Castro Meneses", proceso: "Mercadeo Institucional", cargo: "Profesional de Mercadeo", principal: "Amarillo", secundario: "Rojo" },
-                { nombre: "Omaira Cruz Martínez", proceso: "Vicerrectoria", cargo: "Vicerrectora Administrativa y Financiera", principal: "Amarillo", secundario: "Azul" },
-                { nombre: "Carmen Guerrero González", proceso: "Gestión administrativa", cargo: "Jefe Talento Humano", principal: "Verde", secundario: "Azul" },
-                { nombre: "Juan Carlos Velandia Alvarado", proceso: "Contabilidad", cargo: "Contador", principal: "Verde", secundario: "Azul" },
-                { nombre: "Fabían Andres Díaz Cárdenas", proceso: "Tesorería", cargo: "Tesorero", principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Alexandra Franco Quintero", proceso: "Gestión de Comunicaciones", cargo: "Directora de Comunicaciones", principal: "Verde", secundario: "Rojo" },
-                { nombre: "Pedro Elias Patiño Martínez", proceso: "Laboratorio", cargo: "Coordinador Nacional de Laboratorios", principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Laura Cecilia Contreras Niño", proceso: "Juridica", cargo: "Asesora juridica", principal: "Verde", secundario: "Rojo" },
-                { nombre: "Lina Cáceres Uribe", proceso: "Atención al estudiante", cargo: "Jefe Atención al estudiante", principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Héctor Naín Bayona", proceso: "Registro y Control", cargo: "Director Registro y Control", principal: "Verde", secundario: "Rojo" },
-                { nombre: "Martha Patricia Plata Delgado", proceso: "Gestión Ambiental", cargo: "Coordinadora Gestión Ambiental", principal: "Verde", secundario: "Rojo" },
-                { nombre: "Magdalena Vargas Parra", proceso: "Compras", cargo: "Jefe de Compras", principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Eliana Vargas Ariza", proceso: "Activos Fijos", cargo: "Jefe Activos Fijos", principal: "Verde", secundario: "Rojo" },
-                { nombre: "Esperanza Rojas Rojas", proceso: "Biblioteca", cargo: "Directora de Biblioteca", principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Alexis Rene Palomino", proceso: "Infraestructura Tecnológica", cargo: "Jefe Infraestructura Tecnológica", principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Juan Sebastian Hernández", proceso: "Gestión Ambiental", cargo: "Tecnologo apoyo", principal: "Verde", secundario: "Rojo" },
-                { nombre: "Wilson González Pinto", proceso: "Logistica", cargo: "Jefe de Logistica", principal: "Verde", secundario: "Azul" },
-                { nombre: "Carlos Nova", proceso: "Sistemas de Información", cargo: "Desarrollador de Software", principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Alejandra Marcela Llanos Gutiérrez", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Verde", secundario: "Azul" },
-                { nombre: "Andres Felipe Duarte Herrerra", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Azul", secundario: "Verde" },
-                { nombre: "Gloria Liliana Osorio Avendaño", proceso: "Calidad Administrativa y Financiera", cargo: "Directora de Calidad Administrativa y Financiera", principal: "Rojo", secundario: "Azul" },
-                { nombre: "Melisa Toscano Palomino", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Rojo", secundario: "Amarillo" },
-                { nombre: "Liliana Jimena Naranjo Cepeda", proceso: "Credito y Cartera", cargo: "Jefe Credito y Cartera", principal: "Rojo", secundario: "Amarillo" },
-                { nombre: "Diana Alejandra Gómez Pedraza", proceso: "Presupuesto", cargo: "Jefe de Presupuesto", principal: "Rojo", secundario: "Verde" },
-                { nombre: "Sergio Urbano Contreras", proceso: "Planta Fisica", cargo: "Jefe de Planta Fisica", principal: "Rojo", secundario: "Azul" },
-                { nombre: "Oscar Alfonso Larrota Roa", proceso: "Seguridad Informática", cargo: "Jefe Seguridad Informática", principal: "Rojo", secundario: "Amarillo" },
-                { nombre: "Jorge García Rojas", proceso: "Servicio a Usuario", cargo: "Jefe Servicio a Usuario", principal: "Azul", secundario: "Rojo" }
+                { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera",
+                    principal: "Amarillo", secundario: "Verde" },
+                { nombre: "Javier Fernando Jérez Ortega", proceso: "Contabilidad", cargo: "Ingeniero de Sistemas",
+                    principal: "Amarillo", secundario: "Verde" },
+                { nombre: "Abel Dario Castro Meneses", proceso: "Mercadeo Institucional", cargo: "Profesional de Mercadeo",
+                    principal: "Amarillo", secundario: "Rojo" },
+                { nombre: "Omaira Cruz Martínez", proceso: "Vicerrectoria", cargo: "Vicerrectora Administrativa y Financiera",
+                    principal: "Amarillo", secundario: "Azul" },
+                { nombre: "Carmen Guerrero González", proceso: "Gestión administrativa", cargo: "Jefe Talento Humano",
+                    principal: "Verde", secundario: "Azul" },
+                { nombre: "Juan Carlos Velandia Alvarado", proceso: "Contabilidad", cargo: "Contador", principal: "Verde",
+                    secundario: "Azul" },
+                { nombre: "Fabían Andres Díaz Cárdenas", proceso: "Tesorería", cargo: "Tesorero", principal: "Verde",
+                    secundario: "Amarillo" },
+                { nombre: "Alexandra Franco Quintero", proceso: "Gestión de Comunicaciones", cargo: "Directora de Comunicaciones",
+                    principal: "Verde", secundario: "Rojo" },
+                { nombre: "Pedro Elias Patiño Martínez", proceso: "Laboratorio", cargo: "Coordinador Nacional de Laboratorios",
+                    principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Laura Cecilia Contreras Niño", proceso: "Juridica", cargo: "Asesora juridica", principal: "Verde",
+                    secundario: "Rojo" },
+                { nombre: "Lina Cáceres Uribe", proceso: "Atención al estudiante", cargo: "Jefe Atención al estudiante",
+                    principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Héctor Naín Bayona", proceso: "Registro y Control", cargo: "Director Registro y Control",
+                    principal: "Verde", secundario: "Rojo" },
+                { nombre: "Martha Patricia Plata Delgado", proceso: "Gestión Ambiental", cargo: "Coordinadora Gestión Ambiental",
+                    principal: "Verde", secundario: "Rojo" },
+                { nombre: "Magdalena Vargas Parra", proceso: "Compras", cargo: "Jefe de Compras", principal: "Verde",
+                    secundario: "Amarillo" },
+                { nombre: "Eliana Vargas Ariza", proceso: "Activos Fijos", cargo: "Jefe Activos Fijos", principal: "Verde",
+                    secundario: "Rojo" },
+                { nombre: "Esperanza Rojas Rojas", proceso: "Biblioteca", cargo: "Directora de Biblioteca", principal: "Verde",
+                    secundario: "Amarillo" },
+                { nombre: "Alexis Rene Palomino", proceso: "Infraestructura Tecnológica", cargo: "Jefe Infraestructura Tecnológica",
+                    principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Juan Sebastian Hernández", proceso: "Gestión Ambiental", cargo: "Tecnologo apoyo", principal: "Verde",
+                    secundario: "Rojo" },
+                { nombre: "Wilson González Pinto", proceso: "Logistica", cargo: "Jefe de Logistica", principal: "Verde",
+                    secundario: "Azul" },
+                { nombre: "Carlos Nova", proceso: "Sistemas de Información", cargo: "Desarrollador de Software",
+                    principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Alejandra Marcela Llanos Gutiérrez", proceso: "Calidad Administrativa y Financiera",
+                    cargo: "Profesional de Apoyo", principal: "Verde", secundario: "Azul" },
+                { nombre: "Andres Felipe Duarte Herrerra", proceso: "Calidad Administrativa y Financiera",
+                    cargo: "Profesional de Apoyo", principal: "Azul", secundario: "Verde" },
+                { nombre: "Gloria Liliana Osorio Avendaño", proceso: "Calidad Administrativa y Financiera",
+                    cargo: "Directora de Calidad Administrativa y Financiera", principal: "Rojo", secundario: "Azul" },
+                { nombre: "Melisa Toscano Palomino", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo",
+                    principal: "Rojo", secundario: "Amarillo" },
+                { nombre: "Liliana Jimena Naranjo Cepeda", proceso: "Credito y Cartera", cargo: "Jefe Credito y Cartera",
+                    principal: "Rojo", secundario: "Amarillo" },
+                { nombre: "Diana Alejandra Gómez Pedraza", proceso: "Presupuesto", cargo: "Jefe de Presupuesto", principal: "Rojo",
+                    secundario: "Verde" },
+                { nombre: "Sergio Urbano Contreras", proceso: "Planta Fisica", cargo: "Jefe de Planta Fisica", principal: "Rojo",
+                    secundario: "Azul" },
+                { nombre: "Oscar Alfonso Larrota Roa", proceso: "Seguridad Informática", cargo: "Jefe Seguridad Informática",
+                    principal: "Rojo", secundario: "Amarillo" },
+                { nombre: "Jorge García Rojas", proceso: "Servicio a Usuario", cargo: "Jefe Servicio a Usuario", principal: "Azul",
+                    secundario: "Rojo" }
             ];
 
             document.getElementById('leaderCount').textContent = leadersData.length;
@@ -773,10 +835,36 @@
         }
 
         // ============================================================
-        //  REFRESCAR DATOS
+        //  REFRESCAR DATOS (FORZAR ACTUALIZACIÓN)
         // ============================================================
         function refreshData() {
-            loadDataFromSheets();
+            const btnRefresh = document.getElementById('btnRefresh');
+            const refreshBadge = document.getElementById('refreshBadge');
+            btnRefresh.disabled = true;
+            refreshBadge.textContent = '⏳';
+            refreshBadge.classList.add('loading');
+
+            loadDataFromSheets().finally(() => {
+                btnRefresh.disabled = false;
+            });
+        }
+
+        // ============================================================
+        //  RECARGA AUTOMÁTICA CADA 30 SEGUNDOS
+        // ============================================================
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(() => {
+                console.log('🔄 Actualizando datos automáticamente...');
+                loadDataFromSheets();
+            }, 30000); // 30 segundos
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
         }
 
         // ============================================================
@@ -1586,6 +1674,7 @@
         window.onload = function() {
             initThreeJS();
             loadDataFromSheets();
+            startAutoRefresh(); // ⭐ Recarga automática cada 30 segundos
         };
     </script>
 </body>
