@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌌 Nebulosa de Liderazgo - Conectada a Google Sheets</title>
+    <title>🌌 Nebulosa de Liderazgo</title>
     <style>
+        /* ===== TODOS LOS ESTILOS ===== */
         * {
             margin: 0;
             padding: 0;
@@ -103,7 +104,6 @@
             display: none;
         }
 
-        /* ===== TOOLTIP ===== */
         #tooltip {
             position: absolute;
             background: rgba(10, 14, 26, 0.92);
@@ -130,7 +130,6 @@
         .tt-dot.verde { background: #3a8c5a; }
         #tooltip .tt-label { font-size: 11px; color: #8899bb; margin-left: 4px; }
 
-        /* ===== CONTROLES ===== */
         .controls {
             position: absolute;
             bottom: 30px;
@@ -168,7 +167,6 @@
             padding: 6px 10px;
         }
 
-        /* ===== LEYENDA ===== */
         .legend {
             position: absolute;
             right: 24px;
@@ -260,9 +258,6 @@
             50% { opacity: 0.3; }
         }
 
-        /* ============================================================
-           MODAL - ANÁLISIS DE LIDERAZGO
-           ============================================================ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -430,7 +425,6 @@
 
         .modal .conclusion strong { color: #eef; }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .modal { padding: 20px; max-height: 92vh; }
             .modal-header h2 { font-size: 18px; }
@@ -455,27 +449,23 @@
 </head>
 <body>
 
-    <!-- ===== INFO ===== -->
     <div id="info">
         <h1>🌌 Nebulosa de Liderazgo</h1>
         <small>🖱️ Arrastra para girar · Scroll para zoom · Click en estrella para análisis</small>
     </div>
 
-    <!-- ===== LOADING ===== -->
     <div id="loading">
         <div class="spinner"></div>
         <div class="status">Cargando datos desde <strong>Google Sheets</strong>...</div>
         <div class="status" style="font-size:12px;color:#556688;" id="loadingStatus">Conectando con el servidor</div>
     </div>
 
-    <!-- ===== TOOLTIP ===== -->
     <div id="tooltip">
         <div class="tt-name" id="ttName">Nombre</div>
         <div class="tt-process" id="ttProcess">Proceso</div>
         <div class="tt-colors" id="ttColors"></div>
     </div>
 
-    <!-- ===== LEYENDA ===== -->
     <div class="legend">
         <div class="legend-item"><span class="dot azul"></span> Azul - Analítico</div>
         <div class="legend-item"><span class="dot rojo"></span> Rojo - Directo</div>
@@ -483,24 +473,20 @@
         <div class="legend-item"><span class="dot verde"></span> Verde - Empático</div>
     </div>
 
-    <!-- ===== BOTÓN REFRESCAR ===== -->
     <button class="btn-refresh" onclick="refreshData()" id="btnRefresh">
         <span class="icon">🔄</span>
         Actualizar datos
         <span class="badge" id="refreshBadge">Auto</span>
     </button>
 
-    <!-- ===== ESTADÍSTICAS ===== -->
     <div id="stats">🌟 Líderes: <span id="leaderCount">0</span> · 📅 <span id="lastUpdate">Cargando...</span></div>
 
-    <!-- ===== CONTROLES ===== -->
     <div class="controls">
         <button onclick="resetView()">⟲ Reset</button>
         <button onclick="toggleRotation()">⏸ Pausar</button>
         <span class="zoom-level" id="zoomLevel">100%</span>
     </div>
 
-    <!-- ===== MODAL DE ANÁLISIS ===== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <div class="modal-header">
@@ -516,30 +502,16 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    THREE.JS
-    ============================================================ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <script>
         // ============================================================
-        //  ⭐ CONFIGURACIÓN - GOOGLE SHEETS CON ANTI-CACHÉ
+        //  ⭐ CONFIGURACIÓN - TU URL DE GOOGLE APPS SCRIPT
         // ============================================================
 
-        // 🔑 ID DE TU GOOGLE SHEETS
-        const SHEET_ID = '1S8O7hVqRym-8-TBuU-Bnw-Ad1yuJebtAizcq3hHfHIg';
-
-        // Nombre de la hoja (pestaña) donde están los datos
-        const SHEET_NAME = 'base';
-
-        // ⭐ FUNCIÓN PARA GENERAR URL CON ANTI-CACHÉ
-        function getSheetUrl() {
-            const timestamp = Date.now(); // Evita la caché del navegador
-            return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&_=${timestamp}`;
-        }
+        // 🔑 TU URL DE GOOGLE APPS SCRIPT
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyGOGxby9Mni3HRXEF60uZ15XFC1sMvs83RmyztLuYUybsfoThxqlyoQoN56VxUBYk/exec';
 
         // ============================================================
         //  ESTADO GLOBAL
@@ -558,12 +530,8 @@
         let lastUpdateTime = null;
         let autoRefreshInterval = null;
 
-        // Variables para el modal
         let modalOverlay, modalTitle, modalSubtitle, badgeContainer, modalBody, modalConclusion;
 
-        // ============================================================
-        //  COLORES Y DESCRIPCIONES (fijas)
-        // ============================================================
         const colorMap = { 'Azul': '#2a6f97', 'Rojo': '#c73e3e', 'Amarillo': '#e8a838', 'Verde': '#3a8c5a' };
         const colorHex = { 'Azul': 0x2a6f97, 'Rojo': 0xc73e3e, 'Amarillo': 0xe8a838, 'Verde': 0x3a8c5a };
 
@@ -607,7 +575,7 @@
         };
 
         // ============================================================
-        //  FUNCIÓN PARA CARGAR DATOS DESDE GOOGLE SHEETS (CON ANTI-CACHÉ)
+        //  FUNCIÓN PARA CARGAR DATOS DESDE GOOGLE APPS SCRIPT
         // ============================================================
         async function loadDataFromSheets() {
             if (isLoading) return;
@@ -625,8 +593,9 @@
             refreshBadge.classList.add('loading');
 
             try {
-                // ⭐ USAR URL CON ANTI-CACHÉ
-                const url = getSheetUrl();
+                const url = SHEET_URL + '?t=' + Date.now();
+                console.log('🔗 URL de conexión:', url);
+
                 const response = await fetch(url, {
                     cache: 'no-cache',
                     headers: {
@@ -640,78 +609,41 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const text = await response.text();
+                const data = await response.json();
                 loadingStatus.textContent = 'Procesando datos...';
 
-                // Limpiar la respuesta de Google (tiene un formato especial)
-                const jsonText = text.substring(text.indexOf('(') + 1, text.lastIndexOf(')'));
-                const data = JSON.parse(jsonText);
-
-                // Extraer los datos
-                const rows = data.table.rows;
-                const headers = data.table.cols.map(col => col.label);
-
-                // Encontrar los índices de las columnas
-                const colIndex = {
-                    nombre: headers.indexOf('Nombre'),
-                    proceso: headers.indexOf('Proceso/Subproceso'),
-                    cargo: headers.indexOf('Cargo'),
-                    campus: headers.indexOf('Campus'),
-                    principal: headers.indexOf('LIDERAZGO PRINCIPAL'),
-                    secundario: headers.indexOf('LIDERAZGO SECUNDARIO')
-                };
-
-                // Verificar que todas las columnas necesarias existan
-                const missingCols = [];
-                for (const [key, index] of Object.entries(colIndex)) {
-                    if (index === -1) missingCols.push(key);
+                // Verificar si hay error en la respuesta
+                if (data && data.error) {
+                    throw new Error(data.error);
                 }
 
-                if (missingCols.length > 0) {
-                    throw new Error(`Columnas no encontradas: ${missingCols.join(', ')}. Verifica los nombres en tu Google Sheets.`);
+                if (!data || data.length === 0) {
+                    throw new Error('No se encontraron datos en la hoja.');
                 }
 
-                // Convertir los datos
-                const newData = rows.map(row => {
-                    const getValue = (index) => {
-                        if (index === -1) return '';
-                        return row.c[index] ? String(row.c[index].v || '').trim() : '';
-                    };
-
-                    return {
-                        nombre: getValue(colIndex.nombre),
-                        proceso: getValue(colIndex.proceso),
-                        cargo: getValue(colIndex.cargo),
-                        campus: getValue(colIndex.campus),
-                        principal: getValue(colIndex.principal),
-                        secundario: getValue(colIndex.secundario)
-                    };
-                }).filter(l => l.nombre !== '' && l.principal !== '');
+                // Mapear los datos al formato esperado
+                const newData = data.map(row => ({
+                    nombre: row.Nombre || '',
+                    proceso: row['Proceso/Subproceso'] || '',
+                    cargo: row.Cargo || '',
+                    campus: row.Campus || '',
+                    principal: row['LIDERAZGO PRINCIPAL'] || '',
+                    secundario: row['LIDERAZGO SECUNDARIO'] || ''
+                })).filter(l => l.nombre !== '' && l.principal !== '');
 
                 if (newData.length === 0) {
-                    throw new Error('No se encontraron datos en la hoja. Verifica que tenga datos y que los nombres de las columnas sean correctos.');
+                    throw new Error('No se encontraron datos válidos en la hoja.');
                 }
-
-                // ⭐ COMPARAR CON DATOS ANTERIORES PARA SABER SI HUBO CAMBIOS
-                const oldDataLength = leadersData.length;
-                const hasChanges = oldDataLength !== newData.length || JSON.stringify(leadersData) !== JSON.stringify(newData);
 
                 leadersData = newData;
                 lastUpdateTime = new Date();
 
                 loadingStatus.textContent = `✅ ${leadersData.length} líderes cargados correctamente`;
 
-                // Actualizar estadísticas
                 document.getElementById('leaderCount').textContent = leadersData.length;
                 document.getElementById('lastUpdate').textContent = lastUpdateTime.toLocaleString('es-CO');
 
-                // ⭐ REGENERAR LA GALAXIA SOLO SI HUBO CAMBIOS
-                if (hasChanges) {
-                    regenerateGalaxy();
-                    loadingStatus.textContent = `🔄 Galaxia actualizada (${leadersData.length} líderes)`;
-                } else {
-                    loadingStatus.textContent = `✅ Sin cambios (${leadersData.length} líderes)`;
-                }
+                regenerateGalaxy();
 
                 setTimeout(() => {
                     loading.classList.add('hidden');
@@ -747,68 +679,39 @@
         }
 
         // ============================================================
-        //  DATOS DE EJEMPLO (por si falla la conexión)
+        //  DATOS DE EJEMPLO
         // ============================================================
         function useExampleData() {
             leadersData = [
-                { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera",
-                    principal: "Amarillo", secundario: "Verde" },
-                { nombre: "Javier Fernando Jérez Ortega", proceso: "Contabilidad", cargo: "Ingeniero de Sistemas",
-                    principal: "Amarillo", secundario: "Verde" },
-                { nombre: "Abel Dario Castro Meneses", proceso: "Mercadeo Institucional", cargo: "Profesional de Mercadeo",
-                    principal: "Amarillo", secundario: "Rojo" },
-                { nombre: "Omaira Cruz Martínez", proceso: "Vicerrectoria", cargo: "Vicerrectora Administrativa y Financiera",
-                    principal: "Amarillo", secundario: "Azul" },
-                { nombre: "Carmen Guerrero González", proceso: "Gestión administrativa", cargo: "Jefe Talento Humano",
-                    principal: "Verde", secundario: "Azul" },
-                { nombre: "Juan Carlos Velandia Alvarado", proceso: "Contabilidad", cargo: "Contador", principal: "Verde",
-                    secundario: "Azul" },
-                { nombre: "Fabían Andres Díaz Cárdenas", proceso: "Tesorería", cargo: "Tesorero", principal: "Verde",
-                    secundario: "Amarillo" },
-                { nombre: "Alexandra Franco Quintero", proceso: "Gestión de Comunicaciones", cargo: "Directora de Comunicaciones",
-                    principal: "Verde", secundario: "Rojo" },
-                { nombre: "Pedro Elias Patiño Martínez", proceso: "Laboratorio", cargo: "Coordinador Nacional de Laboratorios",
-                    principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Laura Cecilia Contreras Niño", proceso: "Juridica", cargo: "Asesora juridica", principal: "Verde",
-                    secundario: "Rojo" },
-                { nombre: "Lina Cáceres Uribe", proceso: "Atención al estudiante", cargo: "Jefe Atención al estudiante",
-                    principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Héctor Naín Bayona", proceso: "Registro y Control", cargo: "Director Registro y Control",
-                    principal: "Verde", secundario: "Rojo" },
-                { nombre: "Martha Patricia Plata Delgado", proceso: "Gestión Ambiental", cargo: "Coordinadora Gestión Ambiental",
-                    principal: "Verde", secundario: "Rojo" },
-                { nombre: "Magdalena Vargas Parra", proceso: "Compras", cargo: "Jefe de Compras", principal: "Verde",
-                    secundario: "Amarillo" },
-                { nombre: "Eliana Vargas Ariza", proceso: "Activos Fijos", cargo: "Jefe Activos Fijos", principal: "Verde",
-                    secundario: "Rojo" },
-                { nombre: "Esperanza Rojas Rojas", proceso: "Biblioteca", cargo: "Directora de Biblioteca", principal: "Verde",
-                    secundario: "Amarillo" },
-                { nombre: "Alexis Rene Palomino", proceso: "Infraestructura Tecnológica", cargo: "Jefe Infraestructura Tecnológica",
-                    principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Juan Sebastian Hernández", proceso: "Gestión Ambiental", cargo: "Tecnologo apoyo", principal: "Verde",
-                    secundario: "Rojo" },
-                { nombre: "Wilson González Pinto", proceso: "Logistica", cargo: "Jefe de Logistica", principal: "Verde",
-                    secundario: "Azul" },
-                { nombre: "Carlos Nova", proceso: "Sistemas de Información", cargo: "Desarrollador de Software",
-                    principal: "Verde", secundario: "Amarillo" },
-                { nombre: "Alejandra Marcela Llanos Gutiérrez", proceso: "Calidad Administrativa y Financiera",
-                    cargo: "Profesional de Apoyo", principal: "Verde", secundario: "Azul" },
-                { nombre: "Andres Felipe Duarte Herrerra", proceso: "Calidad Administrativa y Financiera",
-                    cargo: "Profesional de Apoyo", principal: "Azul", secundario: "Verde" },
-                { nombre: "Gloria Liliana Osorio Avendaño", proceso: "Calidad Administrativa y Financiera",
-                    cargo: "Directora de Calidad Administrativa y Financiera", principal: "Rojo", secundario: "Azul" },
-                { nombre: "Melisa Toscano Palomino", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo",
-                    principal: "Rojo", secundario: "Amarillo" },
-                { nombre: "Liliana Jimena Naranjo Cepeda", proceso: "Credito y Cartera", cargo: "Jefe Credito y Cartera",
-                    principal: "Rojo", secundario: "Amarillo" },
-                { nombre: "Diana Alejandra Gómez Pedraza", proceso: "Presupuesto", cargo: "Jefe de Presupuesto", principal: "Rojo",
-                    secundario: "Verde" },
-                { nombre: "Sergio Urbano Contreras", proceso: "Planta Fisica", cargo: "Jefe de Planta Fisica", principal: "Rojo",
-                    secundario: "Azul" },
-                { nombre: "Oscar Alfonso Larrota Roa", proceso: "Seguridad Informática", cargo: "Jefe Seguridad Informática",
-                    principal: "Rojo", secundario: "Amarillo" },
-                { nombre: "Jorge García Rojas", proceso: "Servicio a Usuario", cargo: "Jefe Servicio a Usuario", principal: "Azul",
-                    secundario: "Rojo" }
+                { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera", principal: "Amarillo", secundario: "Verde" },
+                { nombre: "Javier Fernando Jérez Ortega", proceso: "Contabilidad", cargo: "Ingeniero de Sistemas", principal: "Amarillo", secundario: "Verde" },
+                { nombre: "Abel Dario Castro Meneses", proceso: "Mercadeo Institucional", cargo: "Profesional de Mercadeo", principal: "Amarillo", secundario: "Rojo" },
+                { nombre: "Omaira Cruz Martínez", proceso: "Vicerrectoria", cargo: "Vicerrectora Administrativa y Financiera", principal: "Amarillo", secundario: "Azul" },
+                { nombre: "Carmen Guerrero González", proceso: "Gestión administrativa", cargo: "Jefe Talento Humano", principal: "Verde", secundario: "Azul" },
+                { nombre: "Juan Carlos Velandia Alvarado", proceso: "Contabilidad", cargo: "Contador", principal: "Verde", secundario: "Azul" },
+                { nombre: "Fabían Andres Díaz Cárdenas", proceso: "Tesorería", cargo: "Tesorero", principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Alexandra Franco Quintero", proceso: "Gestión de Comunicaciones", cargo: "Directora de Comunicaciones", principal: "Verde", secundario: "Rojo" },
+                { nombre: "Pedro Elias Patiño Martínez", proceso: "Laboratorio", cargo: "Coordinador Nacional de Laboratorios", principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Laura Cecilia Contreras Niño", proceso: "Juridica", cargo: "Asesora juridica", principal: "Verde", secundario: "Rojo" },
+                { nombre: "Lina Cáceres Uribe", proceso: "Atención al estudiante", cargo: "Jefe Atención al estudiante", principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Héctor Naín Bayona", proceso: "Registro y Control", cargo: "Director Registro y Control", principal: "Verde", secundario: "Rojo" },
+                { nombre: "Martha Patricia Plata Delgado", proceso: "Gestión Ambiental", cargo: "Coordinadora Gestión Ambiental", principal: "Verde", secundario: "Rojo" },
+                { nombre: "Magdalena Vargas Parra", proceso: "Compras", cargo: "Jefe de Compras", principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Eliana Vargas Ariza", proceso: "Activos Fijos", cargo: "Jefe Activos Fijos", principal: "Verde", secundario: "Rojo" },
+                { nombre: "Esperanza Rojas Rojas", proceso: "Biblioteca", cargo: "Directora de Biblioteca", principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Alexis Rene Palomino", proceso: "Infraestructura Tecnológica", cargo: "Jefe Infraestructura Tecnológica", principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Juan Sebastian Hernández", proceso: "Gestión Ambiental", cargo: "Tecnologo apoyo", principal: "Verde", secundario: "Rojo" },
+                { nombre: "Wilson González Pinto", proceso: "Logistica", cargo: "Jefe de Logistica", principal: "Verde", secundario: "Azul" },
+                { nombre: "Carlos Nova", proceso: "Sistemas de Información", cargo: "Desarrollador de Software", principal: "Verde", secundario: "Amarillo" },
+                { nombre: "Alejandra Marcela Llanos Gutiérrez", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Verde", secundario: "Azul" },
+                { nombre: "Andres Felipe Duarte Herrerra", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Azul", secundario: "Verde" },
+                { nombre: "Gloria Liliana Osorio Avendaño", proceso: "Calidad Administrativa y Financiera", cargo: "Directora de Calidad Administrativa y Financiera", principal: "Rojo", secundario: "Azul" },
+                { nombre: "Melisa Toscano Palomino", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Rojo", secundario: "Amarillo" },
+                { nombre: "Liliana Jimena Naranjo Cepeda", proceso: "Credito y Cartera", cargo: "Jefe Credito y Cartera", principal: "Rojo", secundario: "Amarillo" },
+                { nombre: "Diana Alejandra Gómez Pedraza", proceso: "Presupuesto", cargo: "Jefe de Presupuesto", principal: "Rojo", secundario: "Verde" },
+                { nombre: "Sergio Urbano Contreras", proceso: "Planta Fisica", cargo: "Jefe de Planta Fisica", principal: "Rojo", secundario: "Azul" },
+                { nombre: "Oscar Alfonso Larrota Roa", proceso: "Seguridad Informática", cargo: "Jefe Seguridad Informática", principal: "Rojo", secundario: "Amarillo" },
+                { nombre: "Jorge García Rojas", proceso: "Servicio a Usuario", cargo: "Jefe Servicio a Usuario", principal: "Azul", secundario: "Rojo" }
             ];
 
             document.getElementById('leaderCount').textContent = leadersData.length;
@@ -835,7 +738,7 @@
         }
 
         // ============================================================
-        //  REFRESCAR DATOS (FORZAR ACTUALIZACIÓN)
+        //  REFRESCAR DATOS
         // ============================================================
         function refreshData() {
             const btnRefresh = document.getElementById('btnRefresh');
@@ -850,14 +753,14 @@
         }
 
         // ============================================================
-        //  RECARGA AUTOMÁTICA CADA 30 SEGUNDOS
+        //  RECARGA AUTOMÁTICA
         // ============================================================
         function startAutoRefresh() {
             if (autoRefreshInterval) clearInterval(autoRefreshInterval);
             autoRefreshInterval = setInterval(() => {
                 console.log('🔄 Actualizando datos automáticamente...');
                 loadDataFromSheets();
-            }, 30000); // 30 segundos
+            }, 60000);
         }
 
         function stopAutoRefresh() {
@@ -1005,8 +908,7 @@
                 positions[i3 + 1] = height * 0.8 + Math.sin(angle * 2) * 0.3;
                 positions[i3 + 2] = Math.sin(angle) * radius * (0.8 + 0.2 * Math.cos(angle * 3));
 
-                const dist = Math.sqrt(positions[i3] * positions[i3] + positions[i3 + 1] * positions[i3 + 1] + positions[i3 + 2] *
-                    positions[i3 + 2]);
+                const dist = Math.sqrt(positions[i3] * positions[i3] + positions[i3 + 1] * positions[i3 + 1] + positions[i3 + 2] * positions[i3 + 2]);
 
                 if (dist < 1.5) {
                     const t = Math.random();
@@ -1059,7 +961,6 @@
             scene.add(cloud);
             nebulaParticles.push(cloud);
 
-            // Segunda capa
             const cloudCount2 = 2000;
             const pos2 = new Float32Array(cloudCount2 * 3);
             const col2 = new Float32Array(cloudCount2 * 3);
@@ -1274,7 +1175,7 @@
         }
 
         // ============================================================
-        //  5. LÍDERES - TAMAÑO REDUCIDO
+        //  5. LÍDERES
         // ============================================================
         function createLeaders() {
             const numLeaders = leadersData.length;
@@ -1305,7 +1206,6 @@
 
                 const group = new THREE.Group();
 
-                // Planeta principal
                 const sphereGeo = new THREE.SphereGeometry(0.12, 16, 16);
                 const sphereMat = new THREE.MeshStandardMaterial({
                     color: color,
@@ -1318,7 +1218,6 @@
                 sphere.userData = { leader: leader, idx: idx };
                 group.add(sphere);
 
-                // Anillo
                 const ringColor = colorHex[leader.secundario] || 0x888888;
                 const ringGeo = new THREE.RingGeometry(0.14, 0.17, 32);
                 const ringMat = new THREE.MeshBasicMaterial({
@@ -1335,7 +1234,6 @@
                 ring.userData = { parent: sphere };
                 group.add(ring);
 
-                // Glow
                 const glowGeo = new THREE.SphereGeometry(0.2, 16, 16);
                 const glowMat = new THREE.MeshBasicMaterial({
                     color: color,
@@ -1347,7 +1245,6 @@
                 const glow = new THREE.Mesh(glowGeo, glowMat);
                 group.add(glow);
 
-                // Luz
                 const light = new THREE.PointLight(color, 0.2, 1.0);
                 group.add(light);
 
@@ -1362,7 +1259,6 @@
                     idx: idx
                 });
 
-                // Etiqueta con iniciales
                 const canvas = document.createElement('canvas');
                 canvas.width = 48;
                 canvas.height = 24;
@@ -1392,7 +1288,7 @@
         }
 
         // ============================================================
-        //  INTERACCIÓN - MOUSE MOVE
+        //  INTERACCIÓN
         // ============================================================
         function onMouseMove(event) {
             const rect = renderer.domElement.getBoundingClientRect();
@@ -1448,9 +1344,6 @@
             });
         }
 
-        // ============================================================
-        //  INTERACCIÓN - CLICK (abre modal)
-        // ============================================================
         function onClick(event) {
             if (hoveredLeader) {
                 selectedLeader = hoveredLeader;
@@ -1459,7 +1352,7 @@
         }
 
         // ============================================================
-        //  FUNCIÓN PARA ABRIR MODAL CON ANÁLISIS
+        //  MODAL DE ANÁLISIS
         // ============================================================
         function openAnalysisModal(leader) {
             if (!leader) return;
@@ -1581,9 +1474,6 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // ============================================================
-        //  CERRAR MODAL
-        // ============================================================
         function closeModal() {
             modalOverlay.classList.remove('active');
             document.body.style.overflow = '';
@@ -1660,7 +1550,7 @@
         });
 
         // ============================================================
-        //  EXPONER FUNCIONES GLOBALMENTE
+        //  EXPONER FUNCIONES
         // ============================================================
         window.resetView = resetView;
         window.toggleRotation = toggleRotation;
@@ -1669,12 +1559,12 @@
         window.refreshData = refreshData;
 
         // ============================================================
-        //  INICIO - CARGAR DATOS Y CREAR ESCENA
+        //  INICIO
         // ============================================================
         window.onload = function() {
             initThreeJS();
             loadDataFromSheets();
-            startAutoRefresh(); // ⭐ Recarga automática cada 30 segundos
+            startAutoRefresh();
         };
     </script>
 </body>
