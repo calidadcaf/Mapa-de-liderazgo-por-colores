@@ -507,11 +507,11 @@
 
     <script>
         // ============================================================
-        //  ⭐ CONFIGURACIÓN - URL DE GOOGLE APPS SCRIPT ACTUALIZADA
+        //  ⭐ CONFIGURACIÓN - TU NUEVA URL DE GOOGLE APPS SCRIPT
         // ============================================================
 
-        // 🔑 TU NUEVA URL DE GOOGLE APPS SCRIPT
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyGOGxby9Mni3HRXEF60uZ15XFC1sMvs83RmyztLuYUybsfoThxqlyoQoN56VxUBYk/exec';
+        // 🔑 TU NUEVA URL DE GOOGLE APPS SCRIPT (ACTUALIZADA)
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzIG506XO2hGz4xL90AmVQnqDN1zeKVjLp1RSMs6W4SyMZmlFPaqQoKCsPzLv396quW/exec';
 
         // ============================================================
         //  ESTADO GLOBAL
@@ -593,7 +593,6 @@
             refreshBadge.classList.add('loading');
 
             try {
-                // Usamos la URL directamente sin proxy, ya que el script está configurado correctamente
                 const url = SHEET_URL + '?t=' + Date.now();
                 console.log('🔗 URL de conexión:', url);
 
