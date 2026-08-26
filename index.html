@@ -507,10 +507,10 @@
 
     <script>
         // ============================================================
-        //  ⭐ CONFIGURACIÓN - TU URL DE GOOGLE APPS SCRIPT
+        //  ⭐ CONFIGURACIÓN - URL DE GOOGLE APPS SCRIPT ACTUALIZADA
         // ============================================================
 
-        // 🔑 TU URL DE GOOGLE APPS SCRIPT
+        // 🔑 TU NUEVA URL DE GOOGLE APPS SCRIPT
         const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyGOGxby9Mni3HRXEF60uZ15XFC1sMvs83RmyztLuYUybsfoThxqlyoQoN56VxUBYk/exec';
 
         // ============================================================
@@ -593,6 +593,7 @@
             refreshBadge.classList.add('loading');
 
             try {
+                // Usamos la URL directamente sin proxy, ya que el script está configurado correctamente
                 const url = SHEET_URL + '?t=' + Date.now();
                 console.log('🔗 URL de conexión:', url);
 
@@ -609,30 +610,47 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const data = await response.json();
+                const text = await response.text();
+                console.log('📄 Respuesta del servidor:', text);
                 loadingStatus.textContent = 'Procesando datos...';
+
+                // Intentar parsear como JSON
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    throw new Error('La respuesta no es JSON válido. Verifica la URL del script.');
+                }
 
                 // Verificar si hay error en la respuesta
                 if (data && data.error) {
                     throw new Error(data.error);
                 }
 
-                if (!data || data.length === 0) {
+                // Si la respuesta tiene un campo "data", usarlo
+                let rows = data;
+                if (data.data && Array.isArray(data.data)) {
+                    rows = data.data;
+                } else if (data.success && data.data) {
+                    rows = data.data;
+                }
+
+                if (!rows || rows.length === 0) {
                     throw new Error('No se encontraron datos en la hoja.');
                 }
 
                 // Mapear los datos al formato esperado
-                const newData = data.map(row => ({
-                    nombre: row.Nombre || '',
-                    proceso: row['Proceso/Subproceso'] || '',
-                    cargo: row.Cargo || '',
-                    campus: row.Campus || '',
-                    principal: row['LIDERAZGO PRINCIPAL'] || '',
-                    secundario: row['LIDERAZGO SECUNDARIO'] || ''
+                const newData = rows.map(row => ({
+                    nombre: row.Nombre || row.nombre || '',
+                    proceso: row['Proceso/Subproceso'] || row.proceso || row['Proceso'] || '',
+                    cargo: row.Cargo || row.cargo || '',
+                    campus: row.Campus || row.campus || '',
+                    principal: row['LIDERAZGO PRINCIPAL'] || row.principal || row['Principal'] || '',
+                    secundario: row['LIDERAZGO SECUNDARIO'] || row.secundario || row['Secundario'] || ''
                 })).filter(l => l.nombre !== '' && l.principal !== '');
 
                 if (newData.length === 0) {
-                    throw new Error('No se encontraron datos válidos en la hoja.');
+                    throw new Error('No se encontraron datos válidos en la hoja. Verifica los nombres de las columnas.');
                 }
 
                 leadersData = newData;
