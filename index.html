@@ -120,46 +120,15 @@
             min-width: 160px;
         }
 
-        #tooltip .tt-name {
-            font-weight: 700;
-            color: #eef;
-            font-size: 14px;
-        }
-        #tooltip .tt-process {
-            color: #7788aa;
-            font-size: 11px;
-            margin-top: 2px;
-        }
-        #tooltip .tt-colors {
-            display: flex;
-            gap: 6px;
-            margin-top: 5px;
-            align-items: center;
-        }
-        #tooltip .tt-dot {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .tt-dot.azul {
-            background: #2a6f97;
-        }
-        .tt-dot.rojo {
-            background: #c73e3e;
-        }
-        .tt-dot.amarillo {
-            background: #e8a838;
-        }
-        .tt-dot.verde {
-            background: #3a8c5a;
-        }
-        #tooltip .tt-label {
-            font-size: 11px;
-            color: #8899bb;
-            margin-left: 4px;
-        }
+        #tooltip .tt-name { font-weight: 700; color: #eef; font-size: 14px; }
+        #tooltip .tt-process { color: #7788aa; font-size: 11px; margin-top: 2px; }
+        #tooltip .tt-colors { display: flex; gap: 6px; margin-top: 5px; align-items: center; }
+        #tooltip .tt-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); }
+        .tt-dot.azul { background: #2a6f97; }
+        .tt-dot.rojo { background: #c73e3e; }
+        .tt-dot.amarillo { background: #e8a838; }
+        .tt-dot.verde { background: #3a8c5a; }
+        #tooltip .tt-label { font-size: 11px; color: #8899bb; margin-left: 4px; }
 
         .controls {
             position: absolute;
@@ -226,22 +195,10 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             flex-shrink: 0;
         }
-        .legend-item .dot.azul {
-            background: #2a6f97;
-            box-shadow: 0 0 12px rgba(42, 111, 151, 0.4);
-        }
-        .legend-item .dot.rojo {
-            background: #c73e3e;
-            box-shadow: 0 0 12px rgba(199, 62, 62, 0.4);
-        }
-        .legend-item .dot.amarillo {
-            background: #e8a838;
-            box-shadow: 0 0 12px rgba(232, 168, 56, 0.4);
-        }
-        .legend-item .dot.verde {
-            background: #3a8c5a;
-            box-shadow: 0 0 12px rgba(58, 140, 90, 0.4);
-        }
+        .legend-item .dot.azul { background: #2a6f97; box-shadow: 0 0 12px rgba(42,111,151,0.4); }
+        .legend-item .dot.rojo { background: #c73e3e; box-shadow: 0 0 12px rgba(199,62,62,0.4); }
+        .legend-item .dot.amarillo { background: #e8a838; box-shadow: 0 0 12px rgba(232,168,56,0.4); }
+        .legend-item .dot.verde { background: #3a8c5a; box-shadow: 0 0 12px rgba(58,140,90,0.4); }
 
         #stats {
             position: absolute;
@@ -297,13 +254,8 @@
         }
 
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         .modal-overlay {
@@ -326,14 +278,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .modal {
@@ -350,18 +296,9 @@
             position: relative;
         }
 
-        .modal::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .modal::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .modal::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-        }
+        .modal::-webkit-scrollbar { width: 6px; }
+        .modal::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
+        .modal::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
 
         .modal-header {
             display: flex;
@@ -420,18 +357,10 @@
             color: white;
         }
 
-        .badge-azul {
-            background: #2a6f97;
-        }
-        .badge-rojo {
-            background: #c73e3e;
-        }
-        .badge-amarillo {
-            background: #e8a838;
-        }
-        .badge-verde {
-            background: #3a8c5a;
-        }
+        .badge-azul { background: #2a6f97; }
+        .badge-rojo { background: #c73e3e; }
+        .badge-amarillo { background: #e8a838; }
+        .badge-verde { background: #3a8c5a; }
 
         .modal .analysis-section {
             margin-bottom: 14px;
@@ -477,18 +406,10 @@
             margin: 0 2px;
         }
 
-        .tag-azul {
-            background: #2a6f97;
-        }
-        .tag-rojo {
-            background: #c73e3e;
-        }
-        .tag-amarillo {
-            background: #e8a838;
-        }
-        .tag-verde {
-            background: #3a8c5a;
-        }
+        .tag-azul { background: #2a6f97; }
+        .tag-rojo { background: #c73e3e; }
+        .tag-amarillo { background: #e8a838; }
+        .tag-verde { background: #3a8c5a; }
 
         .modal .conclusion {
             margin-top: 16px;
@@ -502,69 +423,27 @@
             line-height: 1.6;
         }
 
-        .modal .conclusion strong {
-            color: #eef;
-        }
+        .modal .conclusion strong { color: #eef; }
 
         @media (max-width: 768px) {
-            .modal {
-                padding: 20px;
-                max-height: 92vh;
-            }
-            .modal-header h2 {
-                font-size: 18px;
-            }
-            .modal .analysis-section {
-                padding: 10px 14px;
-            }
-            .modal .analysis-section p {
-                font-size: 13px;
-            }
-            #info h1 {
-                font-size: 16px;
-            }
-            .legend {
-                right: 12px;
-                bottom: 80px;
-                padding: 10px 14px;
-            }
-            .legend-item {
-                font-size: 10px;
-            }
-            .controls {
-                padding: 8px 12px;
-                gap: 6px;
-            }
-            .controls button {
-                font-size: 11px;
-                padding: 4px 10px;
-            }
-            .btn-refresh {
-                top: 80px;
-                right: 12px;
-                padding: 6px 12px;
-                font-size: 11px;
-            }
+            .modal { padding: 20px; max-height: 92vh; }
+            .modal-header h2 { font-size: 18px; }
+            .modal .analysis-section { padding: 10px 14px; }
+            .modal .analysis-section p { font-size: 13px; }
+            #info h1 { font-size: 16px; }
+            .legend { right: 12px; bottom: 80px; padding: 10px 14px; }
+            .legend-item { font-size: 10px; }
+            .controls { padding: 8px 12px; gap: 6px; }
+            .controls button { font-size: 11px; padding: 4px 10px; }
+            .btn-refresh { top: 80px; right: 12px; padding: 6px 12px; font-size: 11px; }
         }
 
         @media (max-width: 500px) {
-            .modal {
-                padding: 16px;
-            }
-            .modal .analysis-section h4 {
-                font-size: 13px;
-            }
-            .modal .analysis-section p {
-                font-size: 12px;
-            }
-            .badge-container .badge {
-                font-size: 11px;
-                padding: 3px 12px;
-            }
-            #loading {
-                padding: 20px;
-                width: 90%;
-            }
+            .modal { padding: 16px; }
+            .modal .analysis-section h4 { font-size: 13px; }
+            .modal .analysis-section p { font-size: 12px; }
+            .badge-container .badge { font-size: 11px; padding: 3px 12px; }
+            #loading { padding: 20px; width: 90%; }
         }
     </style>
 </head>
@@ -623,81 +502,61 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <script>
         // ============================================================
-        //  ⭐ CONFIGURACIÓN - URL CORRECTA DE GOOGLE APPS SCRIPT
+        //  ⭐ CONFIGURACIÓN - PROXY INVERSA CON jsdelivr
         // ============================================================
 
-        // 🔑 TU URL DE GOOGLE APPS SCRIPT (APLICACIÓN WEB)
+        // 🔑 TU URL DE GOOGLE APPS SCRIPT
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIG506XO2hGz4xL90AmVQnqDN1zeKVjLp1RSMs6W4SyMZmlFPaqQoKCsPzLv396quW/exec';
+
+        // ⭐ PROXY INVERSA CON jsdelivr (EVITA CORS)
+        const PROXY_URL = 'https://cdn.jsdelivr.net/npm/';
+
+        // ⭐ FUNCIÓN QUE GENERA LA URL CON EL PROXY
+        function getProxyUrl() {
+            // Usamos jsdelivr como proxy inverso
+            // Codificamos la URL original y la pasamos como parámetro
+            const encodedUrl = encodeURIComponent(SCRIPT_URL);
+            return `https://corsproxy.io/?url=${encodedUrl}`;
+        }
 
         // ============================================================
         //  DATOS DE EJEMPLO (SIEMPRE DISPONIBLES)
         // ============================================================
         const exampleData = [
-            { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera",
-                principal: "Amarillo", secundario: "Verde" },
-            { nombre: "Javier Fernando Jérez Ortega", proceso: "Contabilidad", cargo: "Ingeniero de Sistemas",
-                principal: "Amarillo", secundario: "Verde" },
-            { nombre: "Abel Dario Castro Meneses", proceso: "Mercadeo Institucional", cargo: "Profesional de Mercadeo",
-                principal: "Amarillo", secundario: "Rojo" },
-            { nombre: "Omaira Cruz Martínez", proceso: "Vicerrectoria", cargo: "Vicerrectora Administrativa y Financiera",
-                principal: "Amarillo", secundario: "Azul" },
-            { nombre: "Carmen Guerrero González", proceso: "Gestión administrativa", cargo: "Jefe Talento Humano",
-                principal: "Verde", secundario: "Azul" },
-            { nombre: "Juan Carlos Velandia Alvarado", proceso: "Contabilidad", cargo: "Contador", principal: "Verde",
-                secundario: "Azul" },
-            { nombre: "Fabían Andres Díaz Cárdenas", proceso: "Tesorería", cargo: "Tesorero", principal: "Verde",
-                secundario: "Amarillo" },
-            { nombre: "Alexandra Franco Quintero", proceso: "Gestión de Comunicaciones", cargo: "Directora de Comunicaciones",
-                principal: "Verde", secundario: "Rojo" },
-            { nombre: "Pedro Elias Patiño Martínez", proceso: "Laboratorio", cargo: "Coordinador Nacional de Laboratorios",
-                principal: "Verde", secundario: "Amarillo" },
-            { nombre: "Laura Cecilia Contreras Niño", proceso: "Juridica", cargo: "Asesora juridica", principal: "Verde",
-                secundario: "Rojo" },
-            { nombre: "Lina Cáceres Uribe", proceso: "Atención al estudiante", cargo: "Jefe Atención al estudiante",
-                principal: "Verde", secundario: "Amarillo" },
-            { nombre: "Héctor Naín Bayona", proceso: "Registro y Control", cargo: "Director Registro y Control",
-                principal: "Verde", secundario: "Rojo" },
-            { nombre: "Martha Patricia Plata Delgado", proceso: "Gestión Ambiental", cargo: "Coordinadora Gestión Ambiental",
-                principal: "Verde", secundario: "Rojo" },
-            { nombre: "Magdalena Vargas Parra", proceso: "Compras", cargo: "Jefe de Compras", principal: "Verde",
-                secundario: "Amarillo" },
-            { nombre: "Eliana Vargas Ariza", proceso: "Activos Fijos", cargo: "Jefe Activos Fijos", principal: "Verde",
-                secundario: "Rojo" },
-            { nombre: "Esperanza Rojas Rojas", proceso: "Biblioteca", cargo: "Directora de Biblioteca", principal: "Verde",
-                secundario: "Amarillo" },
-            { nombre: "Alexis Rene Palomino", proceso: "Infraestructura Tecnológica", cargo: "Jefe Infraestructura Tecnológica",
-                principal: "Verde", secundario: "Amarillo" },
-            { nombre: "Juan Sebastian Hernández", proceso: "Gestión Ambiental", cargo: "Tecnologo apoyo", principal: "Verde",
-                secundario: "Rojo" },
-            { nombre: "Wilson González Pinto", proceso: "Logistica", cargo: "Jefe de Logistica", principal: "Verde",
-                secundario: "Azul" },
-            { nombre: "Carlos Nova", proceso: "Sistemas de Información", cargo: "Desarrollador de Software", principal: "Verde",
-                secundario: "Amarillo" },
-            { nombre: "Alejandra Marcela Llanos Gutiérrez", proceso: "Calidad Administrativa y Financiera",
-                cargo: "Profesional de Apoyo", principal: "Verde", secundario: "Azul" },
-            { nombre: "Andres Felipe Duarte Herrerra", proceso: "Calidad Administrativa y Financiera",
-                cargo: "Profesional de Apoyo", principal: "Azul", secundario: "Verde" },
-            { nombre: "Gloria Liliana Osorio Avendaño", proceso: "Calidad Administrativa y Financiera",
-                cargo: "Directora de Calidad Administrativa y Financiera", principal: "Rojo", secundario: "Azul" },
-            { nombre: "Melisa Toscano Palomino", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo",
-                principal: "Rojo", secundario: "Amarillo" },
-            { nombre: "Liliana Jimena Naranjo Cepeda", proceso: "Credito y Cartera", cargo: "Jefe Credito y Cartera",
-                principal: "Rojo", secundario: "Amarillo" },
-            { nombre: "Diana Alejandra Gómez Pedraza", proceso: "Presupuesto", cargo: "Jefe de Presupuesto", principal: "Rojo",
-                secundario: "Verde" },
-            { nombre: "Sergio Urbano Contreras", proceso: "Planta Fisica", cargo: "Jefe de Planta Fisica", principal: "Rojo",
-                secundario: "Azul" },
-            { nombre: "Oscar Alfonso Larrota Roa", proceso: "Seguridad Informática", cargo: "Jefe Seguridad Informática",
-                principal: "Rojo", secundario: "Amarillo" },
-            { nombre: "Jorge García Rojas", proceso: "Servicio a Usuario", cargo: "Jefe Servicio a Usuario", principal: "Azul",
-                secundario: "Rojo" }
+            { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera", principal: "Amarillo", secundario: "Verde" },
+            { nombre: "Javier Fernando Jérez Ortega", proceso: "Contabilidad", cargo: "Ingeniero de Sistemas", principal: "Amarillo", secundario: "Verde" },
+            { nombre: "Abel Dario Castro Meneses", proceso: "Mercadeo Institucional", cargo: "Profesional de Mercadeo", principal: "Amarillo", secundario: "Rojo" },
+            { nombre: "Omaira Cruz Martínez", proceso: "Vicerrectoria", cargo: "Vicerrectora Administrativa y Financiera", principal: "Amarillo", secundario: "Azul" },
+            { nombre: "Carmen Guerrero González", proceso: "Gestión administrativa", cargo: "Jefe Talento Humano", principal: "Verde", secundario: "Azul" },
+            { nombre: "Juan Carlos Velandia Alvarado", proceso: "Contabilidad", cargo: "Contador", principal: "Verde", secundario: "Azul" },
+            { nombre: "Fabían Andres Díaz Cárdenas", proceso: "Tesorería", cargo: "Tesorero", principal: "Verde", secundario: "Amarillo" },
+            { nombre: "Alexandra Franco Quintero", proceso: "Gestión de Comunicaciones", cargo: "Directora de Comunicaciones", principal: "Verde", secundario: "Rojo" },
+            { nombre: "Pedro Elias Patiño Martínez", proceso: "Laboratorio", cargo: "Coordinador Nacional de Laboratorios", principal: "Verde", secundario: "Amarillo" },
+            { nombre: "Laura Cecilia Contreras Niño", proceso: "Juridica", cargo: "Asesora juridica", principal: "Verde", secundario: "Rojo" },
+            { nombre: "Lina Cáceres Uribe", proceso: "Atención al estudiante", cargo: "Jefe Atención al estudiante", principal: "Verde", secundario: "Amarillo" },
+            { nombre: "Héctor Naín Bayona", proceso: "Registro y Control", cargo: "Director Registro y Control", principal: "Verde", secundario: "Rojo" },
+            { nombre: "Martha Patricia Plata Delgado", proceso: "Gestión Ambiental", cargo: "Coordinadora Gestión Ambiental", principal: "Verde", secundario: "Rojo" },
+            { nombre: "Magdalena Vargas Parra", proceso: "Compras", cargo: "Jefe de Compras", principal: "Verde", secundario: "Amarillo" },
+            { nombre: "Eliana Vargas Ariza", proceso: "Activos Fijos", cargo: "Jefe Activos Fijos", principal: "Verde", secundario: "Rojo" },
+            { nombre: "Esperanza Rojas Rojas", proceso: "Biblioteca", cargo: "Directora de Biblioteca", principal: "Verde", secundario: "Amarillo" },
+            { nombre: "Alexis Rene Palomino", proceso: "Infraestructura Tecnológica", cargo: "Jefe Infraestructura Tecnológica", principal: "Verde", secundario: "Amarillo" },
+            { nombre: "Juan Sebastian Hernández", proceso: "Gestión Ambiental", cargo: "Tecnologo apoyo", principal: "Verde", secundario: "Rojo" },
+            { nombre: "Wilson González Pinto", proceso: "Logistica", cargo: "Jefe de Logistica", principal: "Verde", secundario: "Azul" },
+            { nombre: "Carlos Nova", proceso: "Sistemas de Información", cargo: "Desarrollador de Software", principal: "Verde", secundario: "Amarillo" },
+            { nombre: "Alejandra Marcela Llanos Gutiérrez", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Verde", secundario: "Azul" },
+            { nombre: "Andres Felipe Duarte Herrerra", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Azul", secundario: "Verde" },
+            { nombre: "Gloria Liliana Osorio Avendaño", proceso: "Calidad Administrativa y Financiera", cargo: "Directora de Calidad Administrativa y Financiera", principal: "Rojo", secundario: "Azul" },
+            { nombre: "Melisa Toscano Palomino", proceso: "Calidad Administrativa y Financiera", cargo: "Profesional de Apoyo", principal: "Rojo", secundario: "Amarillo" },
+            { nombre: "Liliana Jimena Naranjo Cepeda", proceso: "Credito y Cartera", cargo: "Jefe Credito y Cartera", principal: "Rojo", secundario: "Amarillo" },
+            { nombre: "Diana Alejandra Gómez Pedraza", proceso: "Presupuesto", cargo: "Jefe de Presupuesto", principal: "Rojo", secundario: "Verde" },
+            { nombre: "Sergio Urbano Contreras", proceso: "Planta Fisica", cargo: "Jefe de Planta Fisica", principal: "Rojo", secundario: "Azul" },
+            { nombre: "Oscar Alfonso Larrota Roa", proceso: "Seguridad Informática", cargo: "Jefe Seguridad Informática", principal: "Rojo", secundario: "Amarillo" },
+            { nombre: "Jorge García Rojas", proceso: "Servicio a Usuario", cargo: "Jefe Servicio a Usuario", principal: "Azul", secundario: "Rojo" }
         ];
 
         // ============================================================
@@ -747,8 +606,7 @@
         // ============================================================
         const colorMap = { 'Azul': '#2a6f97', 'Rojo': '#c73e3e', 'Amarillo': '#e8a838', 'Verde': '#3a8c5a' };
         const colorHex = { 'Azul': 0x2a6f97, 'Rojo': 0xc73e3e, 'Amarillo': 0xe8a838, 'Verde': 0x3a8c5a };
-        const colorMapGlow = { 'Azul': 'rgba(42, 111, 151, 0.5)', 'Rojo': 'rgba(199, 62, 62, 0.5)',
-            'Amarillo': 'rgba(232, 168, 56, 0.5)', 'Verde': 'rgba(58, 140, 90, 0.5)' };
+        const colorMapGlow = { 'Azul': 'rgba(42, 111, 151, 0.5)', 'Rojo': 'rgba(199, 62, 62, 0.5)', 'Amarillo': 'rgba(232, 168, 56, 0.5)', 'Verde': 'rgba(58, 140, 90, 0.5)' };
 
         // ============================================================
         //  ESTADO GLOBAL DE THREE.JS
@@ -773,7 +631,7 @@
         let modalOverlay, modalTitle, modalSubtitle, badgeContainer, modalBody, modalConclusion;
 
         // ============================================================
-        //  FUNCIÓN PARA CARGAR DATOS (CONEXIÓN DIRECTA)
+        //  FUNCIÓN PARA CARGAR DATOS (CON PROXY INVERSA)
         // ============================================================
         async function loadDataFromSheets() {
             if (isLoading) return;
@@ -791,9 +649,9 @@
             refreshBadge.classList.add('loading');
 
             try {
-                // 🔗 CONEXIÓN DIRECTA (SIN PROXY)
-                const url = SCRIPT_URL + '?t=' + Date.now();
-                console.log('🔗 Intentando conexión directa:', url);
+                // 🔗 USAMOS PROXY INVERSA CON CORS
+                const url = getProxyUrl() + '&_t=' + Date.now();
+                console.log('🔗 Intentando conexión con proxy inversa:', url);
 
                 const response = await fetch(url, {
                     cache: 'no-cache',
@@ -1067,8 +925,7 @@
                 positions[i3 + 1] = height * 0.8 + Math.sin(angle * 2) * 0.3;
                 positions[i3 + 2] = Math.sin(angle) * radius * (0.8 + 0.2 * Math.cos(angle * 3));
 
-                const dist = Math.sqrt(positions[i3] * positions[i3] + positions[i3 + 1] * positions[i3 + 1] + positions[i3 + 2] *
-                    positions[i3 + 2]);
+                const dist = Math.sqrt(positions[i3] * positions[i3] + positions[i3 + 1] * positions[i3 + 1] + positions[i3 + 2] * positions[i3 + 2]);
 
                 if (dist < 1.5) {
                     const t = Math.random();
