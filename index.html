@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌌 Nebulosa de Liderazgo - Análisis</title>
+    <title>🌌 Nebulosa de Liderazgo</title>
     <style>
-        /* ===== TODOS LOS ESTILOS ORIGINALES ===== */
+        /* ===== TODOS LOS ESTILOS (COMPLETOS Y ORIGINALES) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -58,7 +58,6 @@
             -webkit-text-fill-color: #8899bb;
         }
 
-        /* ===== LOADING ===== */
         #loading {
             position: absolute;
             top: 50%;
@@ -105,7 +104,6 @@
             display: none;
         }
 
-        /* ===== TOOLTIP ===== */
         #tooltip {
             position: absolute;
             background: rgba(10, 14, 26, 0.92);
@@ -122,48 +120,16 @@
             min-width: 160px;
         }
 
-        #tooltip .tt-name {
-            font-weight: 700;
-            color: #eef;
-            font-size: 14px;
-        }
-        #tooltip .tt-process {
-            color: #7788aa;
-            font-size: 11px;
-            margin-top: 2px;
-        }
-        #tooltip .tt-colors {
-            display: flex;
-            gap: 6px;
-            margin-top: 5px;
-            align-items: center;
-        }
-        #tooltip .tt-dot {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .tt-dot.azul {
-            background: #2a6f97;
-        }
-        .tt-dot.rojo {
-            background: #c73e3e;
-        }
-        .tt-dot.amarillo {
-            background: #e8a838;
-        }
-        .tt-dot.verde {
-            background: #3a8c5a;
-        }
-        #tooltip .tt-label {
-            font-size: 11px;
-            color: #8899bb;
-            margin-left: 4px;
-        }
+        #tooltip .tt-name { font-weight: 700; color: #eef; font-size: 14px; }
+        #tooltip .tt-process { color: #7788aa; font-size: 11px; margin-top: 2px; }
+        #tooltip .tt-colors { display: flex; gap: 6px; margin-top: 5px; align-items: center; }
+        #tooltip .tt-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); }
+        .tt-dot.azul { background: #2a6f97; }
+        .tt-dot.rojo { background: #c73e3e; }
+        .tt-dot.amarillo { background: #e8a838; }
+        .tt-dot.verde { background: #3a8c5a; }
+        #tooltip .tt-label { font-size: 11px; color: #8899bb; margin-left: 4px; }
 
-        /* ===== CONTROLES ===== */
         .controls {
             position: absolute;
             bottom: 30px;
@@ -201,7 +167,6 @@
             padding: 6px 10px;
         }
 
-        /* ===== LEYENDA ===== */
         .legend {
             position: absolute;
             right: 24px;
@@ -230,22 +195,10 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             flex-shrink: 0;
         }
-        .legend-item .dot.azul {
-            background: #2a6f97;
-            box-shadow: 0 0 12px rgba(42, 111, 151, 0.4);
-        }
-        .legend-item .dot.rojo {
-            background: #c73e3e;
-            box-shadow: 0 0 12px rgba(199, 62, 62, 0.4);
-        }
-        .legend-item .dot.amarillo {
-            background: #e8a838;
-            box-shadow: 0 0 12px rgba(232, 168, 56, 0.4);
-        }
-        .legend-item .dot.verde {
-            background: #3a8c5a;
-            box-shadow: 0 0 12px rgba(58, 140, 90, 0.4);
-        }
+        .legend-item .dot.azul { background: #2a6f97; box-shadow: 0 0 12px rgba(42,111,151,0.4); }
+        .legend-item .dot.rojo { background: #c73e3e; box-shadow: 0 0 12px rgba(199,62,62,0.4); }
+        .legend-item .dot.amarillo { background: #e8a838; box-shadow: 0 0 12px rgba(232,168,56,0.4); }
+        .legend-item .dot.verde { background: #3a8c5a; box-shadow: 0 0 12px rgba(58,140,90,0.4); }
 
         #stats {
             position: absolute;
@@ -301,18 +254,10 @@
         }
 
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
-        /* ============================================================
-           MODAL - ANÁLISIS DE LIDERAZGO
-           ============================================================ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -333,14 +278,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .modal {
@@ -357,26 +296,19 @@
             position: relative;
         }
 
-        .modal::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .modal::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .modal::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-        }
+        .modal::-webkit-scrollbar { width: 6px; }
+        .modal::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
+        .modal::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding-bottom: 16px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .modal-header h2 {
@@ -425,18 +357,10 @@
             color: white;
         }
 
-        .badge-azul {
-            background: #2a6f97;
-        }
-        .badge-rojo {
-            background: #c73e3e;
-        }
-        .badge-amarillo {
-            background: #e8a838;
-        }
-        .badge-verde {
-            background: #3a8c5a;
-        }
+        .badge-azul { background: #2a6f97; }
+        .badge-rojo { background: #c73e3e; }
+        .badge-amarillo { background: #e8a838; }
+        .badge-verde { background: #3a8c5a; }
 
         .modal .analysis-section {
             margin-bottom: 14px;
@@ -482,18 +406,10 @@
             margin: 0 2px;
         }
 
-        .tag-azul {
-            background: #2a6f97;
-        }
-        .tag-rojo {
-            background: #c73e3e;
-        }
-        .tag-amarillo {
-            background: #e8a838;
-        }
-        .tag-verde {
-            background: #3a8c5a;
-        }
+        .tag-azul { background: #2a6f97; }
+        .tag-rojo { background: #c73e3e; }
+        .tag-amarillo { background: #e8a838; }
+        .tag-verde { background: #3a8c5a; }
 
         .modal .conclusion {
             margin-top: 16px;
@@ -507,70 +423,27 @@
             line-height: 1.6;
         }
 
-        .modal .conclusion strong {
-            color: #eef;
-        }
+        .modal .conclusion strong { color: #eef; }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .modal {
-                padding: 20px;
-                max-height: 92vh;
-            }
-            .modal-header h2 {
-                font-size: 18px;
-            }
-            .modal .analysis-section {
-                padding: 10px 14px;
-            }
-            .modal .analysis-section p {
-                font-size: 13px;
-            }
-            #info h1 {
-                font-size: 16px;
-            }
-            .legend {
-                right: 12px;
-                bottom: 80px;
-                padding: 10px 14px;
-            }
-            .legend-item {
-                font-size: 10px;
-            }
-            .controls {
-                padding: 8px 12px;
-                gap: 6px;
-            }
-            .controls button {
-                font-size: 11px;
-                padding: 4px 10px;
-            }
-            .btn-refresh {
-                top: 80px;
-                right: 12px;
-                padding: 6px 12px;
-                font-size: 11px;
-            }
+            .modal { padding: 20px; max-height: 92vh; }
+            .modal-header h2 { font-size: 18px; }
+            .modal .analysis-section { padding: 10px 14px; }
+            .modal .analysis-section p { font-size: 13px; }
+            #info h1 { font-size: 16px; }
+            .legend { right: 12px; bottom: 80px; padding: 10px 14px; }
+            .legend-item { font-size: 10px; }
+            .controls { padding: 8px 12px; gap: 6px; }
+            .controls button { font-size: 11px; padding: 4px 10px; }
+            .btn-refresh { top: 80px; right: 12px; padding: 6px 12px; font-size: 11px; }
         }
 
         @media (max-width: 500px) {
-            .modal {
-                padding: 16px;
-            }
-            .modal .analysis-section h4 {
-                font-size: 13px;
-            }
-            .modal .analysis-section p {
-                font-size: 12px;
-            }
-            .badge-container .badge {
-                font-size: 11px;
-                padding: 3px 12px;
-            }
-            #loading {
-                padding: 20px;
-                width: 90%;
-            }
+            .modal { padding: 16px; }
+            .modal .analysis-section h4 { font-size: 13px; }
+            .modal .analysis-section p { font-size: 12px; }
+            .badge-container .badge { font-size: 11px; padding: 3px 12px; }
+            #loading { padding: 20px; width: 90%; }
         }
     </style>
 </head>
@@ -617,7 +490,10 @@
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="modalTitle">🔍 Análisis de Liderazgo</h2>
+                <div>
+                    <h2 id="modalTitle">🔍 Análisis de Liderazgo</h2>
+                    <small id="modalSubtitle" style="color:#7788aa;font-size:14px;display:block;margin-top:2px;">Cargo · Proceso</small>
+                </div>
                 <button class="modal-close" onclick="closeModal()">✕</button>
             </div>
             <div class="badge-container" id="badgeContainer"></div>
@@ -626,21 +502,29 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <script>
         // ============================================================
-        //  CONFIGURACIÓN - CON PROXY CORRECTO
+        //  CONFIGURACIÓN - MÚLTIPLES PROXYS Y DATOS DE RESPALDO
         // ============================================================
 
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIG506XO2hGz4xL90AmVQnqDN1zeKVjLp1RSMs6W4SyMZmlFPaqQoKCsPzLv396quW/exec';
-        const SHEET_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SCRIPT_URL);
+
+        // Lista de proxys a probar (si uno falla, usa el siguiente)
+        const PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?url=',
+            'https://cors-anywhere.herokuapp.com/'
+        ];
+
+        let currentProxyIndex = 0;
+        let leadersData = [];
+        let lastUpdateTime = null;
 
         // ============================================================
-        //  DATOS DE EJEMPLO
+        //  DATOS DE EJEMPLO (SIEMPRE DISPONIBLES)
         // ============================================================
         const exampleData = [
             { nombre: "Angélica Calderón Plata", proceso: "Gestión Administrativa y Financiera", cargo: "Directora Administrativa y Financiera",
@@ -704,7 +588,7 @@
         ];
 
         // ============================================================
-        //  DESCRIPCIÓN DE COLORES
+        //  DESCRIPCIONES DE COLORES (para el análisis)
         // ============================================================
         const colorDescriptions = {
             "Azul": {
@@ -748,34 +632,31 @@
         // ============================================================
         //  COLORES Y MAPEOS
         // ============================================================
-        const colores = ['Azul', 'Rojo', 'Amarillo', 'Verde'];
         const colorMap = { 'Azul': '#2a6f97', 'Rojo': '#c73e3e', 'Amarillo': '#e8a838', 'Verde': '#3a8c5a' };
+        const colorHex = { 'Azul': 0x2a6f97, 'Rojo': 0xc73e3e, 'Amarillo': 0xe8a838, 'Verde': 0x3a8c5a };
         const colorMapGlow = { 'Azul': 'rgba(42, 111, 151, 0.5)', 'Rojo': 'rgba(199, 62, 62, 0.5)',
             'Amarillo': 'rgba(232, 168, 56, 0.5)', 'Verde': 'rgba(58, 140, 90, 0.5)' };
-        const colorHex = { 'Azul': 0x2a6f97, 'Rojo': 0xc73e3e, 'Amarillo': 0xe8a838, 'Verde': 0x3a8c5a };
-        const colorIndex = { 'Azul': 0, 'Rojo': 1, 'Amarillo': 2, 'Verde': 3 };
 
         // ============================================================
-        //  ESTADO GLOBAL
+        //  ESTADO GLOBAL DE THREE.JS
         // ============================================================
-        let leadersData = [];
         let scene, camera, renderer, controls;
-        let leaderMeshes = [];
         let isRotating = true;
-        let raycaster, mouse;
-        let hoveredLeader = null;
+        let leaderMeshes = [];
         let allLeaderObjects = [];
         let nebulaParticles = [];
         let glowParticles = [];
+        let hoveredLeader = null;
         let selectedLeader = null;
         let isLoading = false;
-        let lastUpdateTime = null;
         let autoRefreshInterval = null;
+        let brightStars = [];
 
+        // Referencias del modal
         let modalOverlay, modalTitle, modalSubtitle, badgeContainer, modalBody, modalConclusion;
 
         // ============================================================
-        //  FUNCIÓN PARA CARGAR DATOS
+        //  FUNCIÓN PARA CARGAR DATOS CON MÚLTIPLES PROXYS
         // ============================================================
         async function loadDataFromSheets() {
             if (isLoading) return;
@@ -792,119 +673,115 @@
             refreshBadge.textContent = '⏳';
             refreshBadge.classList.add('loading');
 
-            try {
-                const url = SHEET_URL + '&_t=' + Date.now();
-                console.log('🔗 URL de conexión:', url);
+            let success = false;
+            let errorMessage = '';
 
-                const response = await fetch(url, {
-                    cache: 'no-cache',
-                    headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const text = await response.text();
-                console.log('📄 Respuesta del servidor (primeros 200 caracteres):', text.substring(0, 200));
-                loadingStatus.textContent = 'Procesando datos...';
-
-                let data;
+            // Probar cada proxy
+            for (let i = 0; i < PROXIES.length; i++) {
                 try {
-                    data = JSON.parse(text);
-                } catch (e) {
-                    throw new Error('La respuesta no es JSON válido. Verifica la URL del script.');
+                    const proxy = PROXIES[i];
+                    const url = proxy + encodeURIComponent(SCRIPT_URL) + '&_t=' + Date.now();
+                    console.log(`🔗 Intentando con proxy ${i + 1}: ${proxy}`);
+
+                    const response = await fetch(url, {
+                        cache: 'no-cache',
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const text = await response.text();
+
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('No es JSON válido');
+                    }
+
+                    if (data && data.error) {
+                        throw new Error(data.error);
+                    }
+
+                    let rows = data;
+                    if (data.data && Array.isArray(data.data)) {
+                        rows = data.data;
+                    } else if (data.success && data.data) {
+                        rows = data.data;
+                    }
+
+                    if (!rows || rows.length === 0) {
+                        throw new Error('No se encontraron datos en la hoja.');
+                    }
+
+                    const newData = rows.map(row => ({
+                        nombre: row.Nombre || row.nombre || '',
+                        proceso: row['Proceso/Subproceso'] || row.proceso || row['Proceso'] || '',
+                        cargo: row.Cargo || row.cargo || '',
+                        campus: row.Campus || row.campus || '',
+                        principal: row['LIDERAZGO PRINCIPAL'] || row.principal || row['Principal'] || '',
+                        secundario: row['LIDERAZGO SECUNDARIO'] || row.secundario || row['Secundario'] || ''
+                    })).filter(l => l.nombre !== '' && l.principal !== '');
+
+                    if (newData.length === 0) {
+                        throw new Error('No se encontraron datos válidos.');
+                    }
+
+                    // ¡Éxito!
+                    leadersData = newData;
+                    success = true;
+                    break;
+
+                } catch (error) {
+                    console.warn(`⚠️ Proxy ${i + 1} falló:`, error.message);
+                    errorMessage = error.message;
                 }
-
-                if (data && data.error) {
-                    throw new Error(data.error);
-                }
-
-                let rows = data;
-                if (data.data && Array.isArray(data.data)) {
-                    rows = data.data;
-                } else if (data.success && data.data) {
-                    rows = data.data;
-                }
-
-                if (!rows || rows.length === 0) {
-                    throw new Error('No se encontraron datos en la hoja.');
-                }
-
-                const newData = rows.map(row => ({
-                    nombre: row.Nombre || row.nombre || '',
-                    proceso: row['Proceso/Subproceso'] || row.proceso || row['Proceso'] || '',
-                    cargo: row.Cargo || row.cargo || '',
-                    campus: row.Campus || row.campus || '',
-                    principal: row['LIDERAZGO PRINCIPAL'] || row.principal || row['Principal'] || '',
-                    secundario: row['LIDERAZGO SECUNDARIO'] || row.secundario || row['Secundario'] || ''
-                })).filter(l => l.nombre !== '' && l.principal !== '');
-
-                if (newData.length === 0) {
-                    throw new Error('No se encontraron datos válidos en la hoja. Verifica los nombres de las columnas.');
-                }
-
-                leadersData = newData;
-                lastUpdateTime = new Date();
-
-                loadingStatus.textContent = `✅ ${leadersData.length} líderes cargados correctamente`;
-
-                document.getElementById('leaderCount').textContent = leadersData.length;
-                document.getElementById('lastUpdate').textContent = lastUpdateTime.toLocaleString('es-CO');
-
-                regenerateGalaxy();
-
-                setTimeout(() => {
-                    loading.classList.add('hidden');
-                    btnRefresh.disabled = false;
-                    refreshBadge.textContent = '✅';
-                    refreshBadge.classList.remove('loading');
-                    setTimeout(() => {
-                        refreshBadge.textContent = 'Auto';
-                    }, 3000);
-                }, 800);
-
-            } catch (error) {
-                console.error('❌ Error cargando datos:', error);
-                loadingStatus.textContent = `❌ Error: ${error.message}`;
-
-                if (leadersData.length === 0) {
-                    loadingStatus.textContent = '⚠️ Usando datos de ejemplo. Verifica la conexión con Google Sheets.';
-                    useExampleData();
-                }
-
-                setTimeout(() => {
-                    loading.classList.add('hidden');
-                    btnRefresh.disabled = false;
-                    refreshBadge.textContent = '⚠️';
-                    refreshBadge.classList.remove('loading');
-                    setTimeout(() => {
-                        refreshBadge.textContent = 'Auto';
-                    }, 3000);
-                }, 1500);
             }
+
+            // Si no funcionó ningún proxy, usar datos de ejemplo
+            if (!success) {
+                console.warn('⚠️ Todos los proxys fallaron. Usando datos de ejemplo.');
+                loadingStatus.textContent = `⚠️ Sin conexión (${errorMessage}). Mostrando datos de ejemplo.`;
+                leadersData = exampleData;
+                document.getElementById('lastUpdate').textContent = 'Datos de ejemplo (sin conexión)';
+            } else {
+                lastUpdateTime = new Date();
+                loadingStatus.textContent = `✅ ${leadersData.length} líderes cargados correctamente`;
+                document.getElementById('lastUpdate').textContent = lastUpdateTime.toLocaleString('es-CO');
+            }
+
+            // Actualizar UI y galaxia
+            document.getElementById('leaderCount').textContent = leadersData.length;
+            regenerateGalaxy();
+
+            setTimeout(() => {
+                loading.classList.add('hidden');
+                btnRefresh.disabled = false;
+                refreshBadge.textContent = success ? '✅' : '⚠️';
+                refreshBadge.classList.remove('loading');
+                setTimeout(() => {
+                    refreshBadge.textContent = 'Auto';
+                }, 3000);
+            }, 800);
 
             isLoading = false;
         }
 
-        function useExampleData() {
-            leadersData = exampleData;
-            document.getElementById('leaderCount').textContent = leadersData.length;
-            document.getElementById('lastUpdate').textContent = 'Datos de ejemplo (sin conexión)';
-            regenerateGalaxy();
-        }
-
+        // ============================================================
+        //  FUNCIONES DE ACTUALIZACIÓN
+        // ============================================================
         function refreshData() {
             const btnRefresh = document.getElementById('btnRefresh');
             const refreshBadge = document.getElementById('refreshBadge');
             btnRefresh.disabled = true;
             refreshBadge.textContent = '⏳';
             refreshBadge.classList.add('loading');
-
             loadDataFromSheets().finally(() => {
                 btnRefresh.disabled = false;
             });
@@ -915,7 +792,7 @@
             autoRefreshInterval = setInterval(() => {
                 console.log('🔄 Actualizando datos automáticamente...');
                 loadDataFromSheets();
-            }, 60000);
+            }, 120000); // 2 minutos
         }
 
         // ============================================================
@@ -931,7 +808,6 @@
                 allLeaderObjects = [];
                 leaderMeshes = [];
             }
-
             createLeaders();
             document.getElementById('leaderCount').textContent = leadersData.length;
         }
@@ -969,18 +845,14 @@
             controls.minDistance = 2;
             controls.target.set(0, 0, 0);
 
-            raycaster = new THREE.Raycaster();
-            mouse = new THREE.Vector2();
-
-            // ============================================================
-            //  CREAR ELEMENTOS DE LA GALAXIA
-            // ============================================================
+            // Crear elementos de la galaxia
             createStarField();
             createNebulaGas();
             createBrightCore();
             createBrightStars();
             createLeaders();
 
+            // Eventos
             window.addEventListener('resize', onResize);
             window.addEventListener('mousemove', onMouseMove);
             window.addEventListener('click', onClick);
@@ -989,7 +861,7 @@
         }
 
         // ============================================================
-        //  1. FONDO ESTELAR
+        //  CREAR ELEMENTOS DE LA GALAXIA
         // ============================================================
         function createStarField() {
             const count = 6000;
@@ -1058,9 +930,6 @@
             scene.add(stars);
         }
 
-        // ============================================================
-        //  2. NUBES DE GAS (NEBULOSA)
-        // ============================================================
         function createNebulaGas() {
             const cloudCount = 4000;
             const positions = new Float32Array(cloudCount * 3);
@@ -1178,9 +1047,6 @@
             nebulaParticles.push(cloud2);
         }
 
-        // ============================================================
-        //  3. CÚMULO CENTRAL BRILLANTE
-        // ============================================================
         function createBrightCore() {
             const coreGeo = new THREE.SphereGeometry(0.8, 32, 32);
             const coreMat = new THREE.MeshBasicMaterial({
@@ -1261,9 +1127,6 @@
             scene.add(light);
         }
 
-        // ============================================================
-        //  4. ESTRELLAS BRILLANTES CON DIFRACCIÓN
-        // ============================================================
         function createBrightStars() {
             const starPositions = [
                 { x: -2.5, y: 1.8, z: 1.2, color: 0x88ccff, size: 0.6 },
@@ -1341,12 +1204,11 @@
             scene.add(group);
 
             group.userData = { angle: Math.random() * Math.PI * 2, speed: 0.2 + Math.random() * 0.3 };
-            window.brightStars = window.brightStars || [];
-            window.brightStars.push(group);
+            brightStars.push(group);
         }
 
         // ============================================================
-        //  5. LÍDERES - TAMAÑO REDUCIDO
+        //  5. CREAR LÍDERES (TAMAÑO REDUCIDO)
         // ============================================================
         function createLeaders() {
             const numLeaders = leadersData.length;
@@ -1526,7 +1388,7 @@
         }
 
         // ============================================================
-        //  MODAL DE ANÁLISIS
+        //  MODAL DE ANÁLISIS (COMPLETO)
         // ============================================================
         function openAnalysisModal(leader) {
             if (!leader) return;
@@ -1691,14 +1553,12 @@
                 obj.group.position.y += Math.sin(time + offset) * 0.00008;
             });
 
-            if (window.brightStars) {
-                window.brightStars.forEach((star, i) => {
-                    star.rotation.z += 0.002;
-                    star.rotation.x += 0.001;
-                    const pulse = 1 + 0.05 * Math.sin(Date.now() / 2000 + i);
-                    star.scale.set(pulse, pulse, pulse);
-                });
-            }
+            brightStars.forEach((star, i) => {
+                star.rotation.z += 0.002;
+                star.rotation.x += 0.001;
+                const pulse = 1 + 0.05 * Math.sin(Date.now() / 2000 + i);
+                star.scale.set(pulse, pulse, pulse);
+            });
 
             nebulaParticles.forEach((cloud, i) => {
                 cloud.rotation.y += 0.0002 * (i + 1);
@@ -1715,6 +1575,9 @@
         // ============================================================
         //  EVENTOS
         // ============================================================
+        let mouse = new THREE.Vector2();
+        let raycaster = new THREE.Raycaster();
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
         });
